@@ -18,7 +18,7 @@ public abstract class LazyFragment extends BaseFragment {
     private boolean isInited;
     private boolean  needInit;
 
-    private View root;
+    protected View root;
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

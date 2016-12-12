@@ -31,6 +31,11 @@ public class ClassBean {
     private boolean IsPreregistration;
     private boolean SupportedDeductionIntegral;
     private boolean isSellOut;
+    /**
+     * Summary : 12月8日11:18同步开启先付预售。
+     */
+
+    private String Summary;
 
     public int getI() {
         return i;
@@ -230,5 +235,13 @@ public class ClassBean {
 
     public void setIsSellOut(boolean isSellOut) {
         this.isSellOut = isSellOut;
+    }
+
+    public String getSummary() {
+        return Summary;
+    }
+
+    public void setSummary(String Summary) {
+        this.Summary = Summary;
     }
 }

@@ -16,11 +16,14 @@ import java.util.ArrayList;
 public class ClassFragmentAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Fragment> fragments;
+    private String[] titles;
 
-    public ClassFragmentAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
+    public ClassFragmentAdapter(FragmentManager fm, ArrayList<Fragment> fragments, String[] titles) {
         super(fm);
         this.fragments = fragments;
+        this.titles = titles;
     }
+
 
     @Override
     public int getCount() {
@@ -34,6 +37,6 @@ public class ClassFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "aaa"+position;
+        return titles[position];
     }
 }

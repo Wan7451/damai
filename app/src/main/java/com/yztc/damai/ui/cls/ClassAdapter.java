@@ -2,6 +2,7 @@ package com.yztc.damai.ui.cls;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,14 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             clsHolder.classSeat.setText("座");
             clsHolder.classState.setText("售票中");
 
+            if(TextUtils.isEmpty(clsBean.getSummary())){
+                clsHolder.classSummery.setVisibility(View.GONE);
+            }else {
+                clsHolder.classSummery.setVisibility(View.VISIBLE);
+                clsHolder.classSummery.setText("『"+clsBean.getSummary()+"』");
+            }
+
+
             clsHolder.classImg.setImageResource(R.mipmap.ic_launcher);
 
             String i = String.valueOf(clsBean.getI());
@@ -83,7 +92,8 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView classTheatre;
         @BindView(R.id.class_price)
         TextView classPrice;
-
+        @BindView(R.id.class_summery)
+        TextView classSummery;
         public ClassHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

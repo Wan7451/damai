@@ -2,6 +2,7 @@ package com.yztc.damai.net;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.yztc.damai.utils.ToastUtils;
@@ -92,6 +93,9 @@ public class NetUtils {
                     conn.setConnectTimeout(CONNECT_TIMEOUT);
                     conn.setReadTimeout(READ_TIMEOUT);
                     int code = conn.getResponseCode();
+                    if(DEBUG) {
+                        Log.i(TAG,"state:"+code);
+                    }
                     if (code == 200) {
                         stream = conn.getInputStream();
                         BufferedReader reader =
@@ -147,7 +151,7 @@ public class NetUtils {
 
 
     private void handleError(final NetResponse response, final String error) {
-        if(DEBUG)
+        if(DEBUG && !TextUtils.isEmpty(error))
             Log.i(TAG,error);
         handler.post(new Runnable() {
             @Override

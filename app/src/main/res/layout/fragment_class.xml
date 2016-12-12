@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.yztc.damai.ui.cls.ClassFragment">
 
@@ -9,7 +10,11 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/red"
+        app:tabTextColor="@color/text_title"
+        app:tabSelectedTextColor="@color/red"
+        />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
