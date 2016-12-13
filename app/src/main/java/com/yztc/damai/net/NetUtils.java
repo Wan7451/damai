@@ -7,18 +7,15 @@ import android.util.Log;
 
 import com.yztc.damai.utils.ToastUtils;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,30 +62,50 @@ public class NetUtils {
 
     public void get(final String path, final HashMap<String, String> maps, final NetResponse response) {
 
-        if(!NetStatusUtils.isConnect()){
-            ToastUtils.show("网络无连接");
-            return;
-        }
+//        if(!NetStatusUtils.isConnect()){
+//            ToastUtils.show("网络无连接");
+//            handleError(response,"网络无连接");
+//            return;
+//        }
 
 
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
+
+
                 //拼接URL地址
                 StringBuilder builder = new StringBuilder(NetConfig.BASE_URL);
                 builder.append(path);
                 //添加参数
                 builder.append("?");
                 builder.append(buildParams(maps));
+                String urlPath=builder.toString();
+
+                String cache = NetDataCache.getInstance().getAsString(urlPath);
+
+                if(!TextUtils.isEmpty(cache)){
+                    if(DEBUG) {
+                        Log.i(TAG,"state: from Cache");
+                    }
+                    handleSuccess(response,cache);
+                    return;
+                }
+
+                if(!NetStatusUtils.isConnect()){
+                    handleError(response,"网络没有连接");
+                    return;
+                }
+
                 //查看URL
                 if(DEBUG){
-                    Log.i(TAG,builder.toString());
+                    Log.i(TAG,urlPath);
                 }
 
                 InputStream stream = null;
                 HttpURLConnection conn = null;
                 try {
-                    URL url = new URL(builder.toString());
+                    URL url = new URL(urlPath);
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setConnectTimeout(CONNECT_TIMEOUT);
                     conn.setReadTimeout(READ_TIMEOUT);
@@ -100,26 +117,20 @@ public class NetUtils {
                         stream = conn.getInputStream();
                         BufferedReader reader =
                                 new BufferedReader(new InputStreamReader(stream));
-                        final StringBuilder resut = new StringBuilder();
+                        StringBuilder result = new StringBuilder();
                         String temp;
                         while ((temp = reader.readLine()) != null) {
-                            resut.append(temp);
+                            result.append(temp);
                         }
-                        if (response != null) {
-                            handleSuccess(response,resut.toString());
-                        }
+
+                        NetDataCache.getInstance().put(urlPath,result.toString());
+                        handleSuccess(response,result.toString());
                     } else if (code > 500) {
-                        if (response != null) {
                             handleError(response,"后台服务异常");
-                        }
                     } else if (code > 400) {
-                        if (response != null) {
                             handleError(response,"网络连接异常");
-                        }
                     } else {
-                        if (response != null) {
                             handleError(response,"未知异常");
-                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -153,6 +164,10 @@ public class NetUtils {
     private void handleError(final NetResponse response, final String error) {
         if(DEBUG && !TextUtils.isEmpty(error))
             Log.i(TAG,error);
+
+        if(response==null)
+            return;
+
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -164,6 +179,10 @@ public class NetUtils {
     private void handleSuccess(final NetResponse response, final String result) {
         if(DEBUG)
             Log.i(TAG,result);
+
+        if(response==null)
+            return;
+
         handler.post(new Runnable() {
             @Override
             public void run() {

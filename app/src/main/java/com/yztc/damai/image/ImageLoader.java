@@ -1,23 +1,19 @@
 package com.yztc.damai.image;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.yztc.damai.App;
+import com.yztc.damai.utils.DiskLruCache;
 import com.yztc.damai.utils.FileUtils;
 import com.yztc.damai.utils.MD5Utils;
+import com.yztc.damai.utils.AppUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,11 +21,9 @@ import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -151,7 +145,7 @@ public class ImageLoader {
             //4  缓存空间大小
             mDiskCache = DiskLruCache.open(
                     FileUtils.getImageCacheFloder(),
-                    getAppVersion(),
+                    AppUtils.getAppVersion(),
                     1,
                     DISK_CACHE_SIZE
             );
@@ -203,16 +197,7 @@ public class ImageLoader {
     }
 
 
-    private int getAppVersion() {
-        try {
-            PackageManager manager = App.context.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(App.context.getPackageName(), 0);
-            return info.versionCode;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 1;
-        }
-    }
+
 
 
     /**
@@ -258,7 +243,10 @@ public class ImageLoader {
                     inputStream = snapShot.getInputStream(0);
                     Bitmap bitmap = null;
                     if (inputStream != null) {
-                        bitmap = BitmapFactory.decodeStream(inputStream);
+                        //RGB565 方式加载图片
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.RGB_565;
+                        bitmap = BitmapFactory.decodeStream(inputStream,null,options);
                     }
                     if (bitmap != null) {
                         mLruCache.put(imageUrl, bitmap);
@@ -287,6 +275,7 @@ public class ImageLoader {
 
             if (view != null && bitmap != null
                     && view.getTag().equals(imageUrl)) {
+                //解决图片错位
                 view.setImageBitmap(bitmap);
             }
 

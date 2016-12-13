@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yztc.damai.image;
+package com.yztc.damai.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
