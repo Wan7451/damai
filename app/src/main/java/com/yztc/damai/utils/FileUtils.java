@@ -15,8 +15,11 @@ public class FileUtils {
     public static File getCacheFloder(){
         File root;
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            // sdcard/android/data/包名/cache
             root=App.context.getExternalCacheDir();
+            //Environment.getExternalStorageDirectory()
         }else {
+            // /data/data/包名/cache
             root=App.context.getCacheDir();
         }
         return root;

@@ -2,11 +2,14 @@ package com.yztc.damai.net;
 
 /**
  * Created by wanggang on 2016/12/12.
+ *
+ * 公共参数  BASE_URL
  */
 
 public class NetConfig {
 
     public static final String BASE_URL="http://mapi.damai.cn/";
+//    public static final String BASE_URL="http://mapi.damai.cn/";
 
     public static final String osType="2";
 

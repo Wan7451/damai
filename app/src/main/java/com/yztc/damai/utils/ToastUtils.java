@@ -6,6 +6,9 @@ import com.yztc.damai.App;
 
 /**
  * Created by wanggang on 2016/12/12.
+ *
+ * 解决Toast重叠问题
+ *
  */
 
 public class ToastUtils {

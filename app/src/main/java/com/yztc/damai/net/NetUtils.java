@@ -29,10 +29,10 @@ import java.util.concurrent.Executors;
 public class NetUtils {
 
     //同时线程数量
-    private static final int THREAD_NUM = 3;
+    private static final int THREAD_NUM = 4;
 
-    private static final int CONNECT_TIMEOUT = 20 * 1000;
-    private static final int READ_TIMEOUT = 20 * 1000;
+    private static final int CONNECT_TIMEOUT = 30 * 1000;
+    private static final int READ_TIMEOUT = 30 * 1000;
 
     private static final String TAG="==NET=>";
 
@@ -44,12 +44,14 @@ public class NetUtils {
     private Handler handler;
 
     private NetUtils() {
+        //线程池
         threadPool =
                 Executors.newFixedThreadPool(THREAD_NUM);
          handler=new Handler();
     }
 
     public static NetUtils getInstance() {
+        //防止创建多个对象
         if (instance == null) {
             synchronized (NetUtils.class) {
                 if (instance == null) {
@@ -63,8 +65,6 @@ public class NetUtils {
 
     public void get(final String path, final HashMap<String, String> maps, final NetResponse response) {
 
-
-
         if(!NetStatusUtils.isConnect()){
             ToastUtils.show("网络无连接");
             return;
@@ -74,13 +74,13 @@ public class NetUtils {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
-
+                //拼接URL地址
                 StringBuilder builder = new StringBuilder(NetConfig.BASE_URL);
                 builder.append(path);
-                if (maps != null && maps.size() > 0) {
-                    builder.append("?");
-                    builder.append(buildParams(maps));
-                }
+                //添加参数
+                builder.append("?");
+                builder.append(buildParams(maps));
+                //查看URL
                 if(DEBUG){
                     Log.i(TAG,builder.toString());
                 }
@@ -108,13 +108,13 @@ public class NetUtils {
                         if (response != null) {
                             handleSuccess(response,resut.toString());
                         }
-                    } else if (code > 400) {
-                        if (response != null) {
-                            handleError(response,"网络连接异常");
-                        }
                     } else if (code > 500) {
                         if (response != null) {
                             handleError(response,"后台服务异常");
+                        }
+                    } else if (code > 400) {
+                        if (response != null) {
+                            handleError(response,"网络连接异常");
                         }
                     } else {
                         if (response != null) {
@@ -184,9 +184,15 @@ public class NetUtils {
     }
 
     private String buildParams(@NonNull HashMap<String, String> maps) {
-        maps.putAll(getBasicParams());
+        //公共参数
+        HashMap<String, String> basicParams = getBasicParams();
+        //业务参数
+        if(maps!=null && maps.size()>0) {
+            basicParams.putAll(maps);
+        }
         StringBuilder builder = new StringBuilder();
-        Iterator<Map.Entry<String, String>> iterator = maps.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> iterator =
+                basicParams.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, String> next = iterator.next();
             builder.append(next.getKey());

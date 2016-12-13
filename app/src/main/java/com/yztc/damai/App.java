@@ -9,6 +9,10 @@ import android.content.Context;
 
 public class App extends Application {
 
+    //App  Context
+    //Activity、Service Context
+    //1 全局
+    //2 生命周期长
     public static Context context;
 
     @Override

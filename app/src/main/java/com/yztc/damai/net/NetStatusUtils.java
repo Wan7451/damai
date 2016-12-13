@@ -17,8 +17,7 @@ public class NetStatusUtils {
     public static boolean isConnect(){
 
 
-
-     ConnectivityManager mgr= (ConnectivityManager)
+        ConnectivityManager mgr= (ConnectivityManager)
              App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = mgr.getActiveNetworkInfo();
         if(netInfo!=null){
