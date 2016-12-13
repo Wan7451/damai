@@ -119,9 +119,8 @@ public class NetDataCache {
                     mDiskLruCache.remove(getKey(key));
                     return "";
                 }
-                String endTag="!>\n";
-                int indexOf = data.indexOf(endTag);
-                data=data.substring(indexOf+endTag.length(),data.length());
+                int indexOf = data.indexOf("{");
+                data=data.substring(indexOf,data.length());
             }
 
             return data;

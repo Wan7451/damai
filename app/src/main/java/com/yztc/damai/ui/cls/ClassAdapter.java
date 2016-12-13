@@ -3,6 +3,7 @@ package com.yztc.damai.ui.cls;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,9 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             clsHolder.classImg.setImageResource(R.mipmap.ic_launcher);
 
             String i = String.valueOf(clsBean.getI());
-            String imageURI = BASR_IMG + i.substring(0, 4) + "/" + i + "_n.jpg";
+
+            String imageURI = BASR_IMG + i.substring(0, i.length()-2) + "/" + i + "_n.jpg";
+
             ImageLoader.getInstance().loadImages(clsHolder.classImg, imageURI, false);
         }
     }
