@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.*;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 
 import com.google.gson.Gson;
@@ -31,6 +32,8 @@ public class ClassItemFragment extends LazyFragment {
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
+    private ViewStub stubView;
+    private View emptyView;
 
     public ClassItemFragment() {
     }
@@ -40,35 +43,36 @@ public class ClassItemFragment extends LazyFragment {
     private ClassAdapter adapter;
 
     private int type;
-    private int page=1;
+    private int page = 1;
 
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_item_class;
     }
+
     @Override
     protected void init(final View v) {
 
-      type=getArguments().getInt("type");
-        switch (type){
+        type = getArguments().getInt("type");
+        switch (type) {
             case 9:
-                type=100;
+                type = 100;
                 break;
             case 10:
-                type=200;
+                type = 200;
         }
 
         refreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshView);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycleView);
-
+        stubView = (ViewStub) v.findViewById(R.id.emptyView);
         refreshLayout.setColorSchemeColors(
                 getResources().getColor(R.color.red),
                 getResources().getColor(R.color.green),
                 getResources().getColor(R.color.yellow)
         );
 
-        DividerItemDecoration decoration=new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -82,7 +86,6 @@ public class ClassItemFragment extends LazyFragment {
         });
 
 
-
         root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -93,8 +96,6 @@ public class ClassItemFragment extends LazyFragment {
         });
 
 
-
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItem;
 
@@ -102,9 +103,9 @@ public class ClassItemFragment extends LazyFragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
-                    if(!refreshLayout.isRefreshing()){
-                    refreshLayout.setRefreshing(true);
-                    addData();
+                    if (!refreshLayout.isRefreshing()) {
+                        refreshLayout.setRefreshing(true);
+                        addData();
                     }
                 }
             }
@@ -114,11 +115,11 @@ public class ClassItemFragment extends LazyFragment {
                 super.onScrolled(recyclerView, dx, dy);
 
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                if(layoutManager instanceof LinearLayoutManager){
+                if (layoutManager instanceof LinearLayoutManager) {
 
                     int last = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-                    if(last!=-1){
-                        lastVisibleItem=last;
+                    if (last != -1) {
+                        lastVisibleItem = last;
                     }
                 }
 
@@ -131,10 +132,10 @@ public class ClassItemFragment extends LazyFragment {
         HashMap<String, String> params = new HashMap<>();
         params.put("cc", "0");
         params.put("ps", "20");
-        params.put("mc", type+"");
+        params.put("mc", type + "");
         params.put("ot", "0");
         params.put("v", "0");
-        params.put("p", ++page+"");
+        params.put("p", ++page + "");
         params.put("cityId", "852");
 
         NetUtils.getInstance().get("ProjLst.aspx", params, new NetResponse() {
@@ -164,16 +165,14 @@ public class ClassItemFragment extends LazyFragment {
     }
 
     private void loadData() {
-
-        page=1;
-
+        page = 1;
         HashMap<String, String> params = new HashMap<>();
         params.put("cc", "0");
         params.put("ps", "20");
-        params.put("mc", type+"");
+        params.put("mc", type + "");
         params.put("ot", "0");
         params.put("v", "0");
-        params.put("p", page+"");
+        params.put("p", page + "");
         params.put("cityId", "852");
 
         NetUtils.getInstance().get("ProjLst.aspx", params, new NetResponse() {
@@ -182,6 +181,10 @@ public class ClassItemFragment extends LazyFragment {
                 refreshLayout.setRefreshing(false);
                 try {
                     JSONObject object = new JSONObject(response);
+                    if (!object.has("l")) {
+                        showErrorView();
+                        return;
+                    }
                     JSONArray array = object.getJSONArray("l");
                     data.clear();
                     Gson gson = new Gson();
@@ -203,11 +206,26 @@ public class ClassItemFragment extends LazyFragment {
         });
     }
 
-    public static Fragment newInstance(int i) {
+    private void showErrorView() {
+        if (emptyView == null) {
+            emptyView = stubView.inflate();
+        }
+        emptyView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
 
-        ClassItemFragment f=new ClassItemFragment();
-        Bundle args=new Bundle();
-        args.putInt("type",i);
+    private void hintErrorView() {
+        if (emptyView == null) {
+            emptyView = stubView.inflate();
+        }
+        emptyView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public static Fragment newInstance(int i) {
+        ClassItemFragment f = new ClassItemFragment();
+        Bundle args = new Bundle();
+        args.putInt("type", i);
         f.setArguments(args);
         return f;
     }
