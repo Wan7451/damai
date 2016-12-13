@@ -15,6 +15,7 @@ import com.yztc.damai.R;
 import com.yztc.damai.base.LazyFragment;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,6 +145,10 @@ public class ClassItemFragment extends LazyFragment {
                 refreshLayout.setRefreshing(false);
                 try {
                     JSONObject object = new JSONObject(response);
+                    if (!object.has("l")) {
+                        showErrorHint();
+                        return;
+                    }
                     JSONArray array = object.getJSONArray("l");
                     Gson gson = new Gson();
                     for (int i = 0, size = array.length(); i < size; i++) {
@@ -162,6 +167,10 @@ public class ClassItemFragment extends LazyFragment {
                 refreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    private void showErrorHint() {
+        ToastUtils.showLong("已经到底啦~~");
     }
 
     private void loadData() {

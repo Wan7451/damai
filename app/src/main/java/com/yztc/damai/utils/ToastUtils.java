@@ -23,6 +23,13 @@ public class ToastUtils {
         toast.show();
     }
 
+    public static void showLong(String text){
+        init();
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setText(text);
+        toast.show();
+    }
+
     private ToastUtils(){}
 
     private static Toast init(){
