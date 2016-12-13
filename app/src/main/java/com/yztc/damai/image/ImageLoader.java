@@ -79,6 +79,7 @@ public class ImageLoader {
         Bitmap bitmap = getBitmapFromCache(imageUrl);
         if (bitmap == null) {
             imageViewManager.put(imageUrl, imgView);
+            imgView.setTag(imageUrl);
             ImageDownloadTask task = new ImageDownloadTask(imageUrl);
             addTaskToQueue(task, priority);
         } else {
@@ -284,7 +285,8 @@ public class ImageLoader {
             ImageView view = (ImageView)
                     imageViewManager.get(imageUrl);
 
-            if (view != null && bitmap != null) {
+            if (view != null && bitmap != null
+                    && view.getTag().equals(imageUrl)) {
                 view.setImageBitmap(bitmap);
             }
 
