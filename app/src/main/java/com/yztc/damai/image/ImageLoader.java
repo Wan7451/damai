@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by wanggang on 2016/12/12.
@@ -47,6 +49,8 @@ public class ImageLoader {
     private List<ImageDownloadTask> waitingQueue;
     //正在进行下载任务的imageview
     private LinkedHashMap<String, View> imageViewManager;
+
+    private ExecutorService executorService;
 
     private static ImageLoader instance = null;
 
@@ -88,7 +92,7 @@ public class ImageLoader {
         if (loadingQueue.size() < MAX_THREAD_NUM) {
             //添加到下载队列
             loadingQueue.add(task);
-            task.execute();
+            task.executeOnExecutor(executorService);;
         } else {
             //添加到等待队列
             if (priority)
@@ -135,6 +139,8 @@ public class ImageLoader {
         waitingQueue = new ArrayList<>();
         //imageView  url 绑定
         imageViewManager = new LinkedHashMap<>();
+        //线程池
+         executorService = Executors.newFixedThreadPool(MAX_THREAD_NUM);
     }
 
     private void initLocalCache() {
@@ -305,7 +311,7 @@ public class ImageLoader {
                 ImageDownloadTask task = waitingQueue.get(0);
                 waitingQueue.remove(task);
                 loadingQueue.add(task);
-                task.execute();
+                task.executeOnExecutor(executorService);
             } else {
                 break;
             }

@@ -31,9 +31,9 @@ public class NetUtils {
     private static final int CONNECT_TIMEOUT = 30 * 1000;
     private static final int READ_TIMEOUT = 30 * 1000;
 
-    private static final String TAG="==NET=>";
+    private static final String TAG = "==NET=>";
 
-    private static final boolean DEBUG=true;
+    private static final boolean DEBUG = true;
 
     private static NetUtils instance = null;
 
@@ -44,7 +44,7 @@ public class NetUtils {
         //线程池
         threadPool =
                 Executors.newFixedThreadPool(THREAD_NUM);
-         handler=new Handler();
+        handler = new Handler();
     }
 
     public static NetUtils getInstance() {
@@ -80,26 +80,26 @@ public class NetUtils {
                 //添加参数
                 builder.append("?");
                 builder.append(buildParams(maps));
-                String urlPath=builder.toString();
+                String urlPath = builder.toString();
 
                 String cache = NetDataCache.getInstance().getAsString(urlPath);
 
-                if(!TextUtils.isEmpty(cache)){
-                    if(DEBUG) {
-                        Log.i(TAG,"state: from Cache");
+                if (!TextUtils.isEmpty(cache)) {
+                    if (DEBUG) {
+                        Log.i(TAG, "state: from Cache");
                     }
-                    handleSuccess(response,cache);
+                    handleSuccess(response, cache);
                     return;
                 }
 
-                if(!NetStatusUtils.isConnect()){
-                    handleError(response,"网络没有连接");
+                if (!NetStatusUtils.isConnect()) {
+                    handleError(response, "网络没有连接");
                     return;
                 }
 
                 //查看URL
-                if(DEBUG){
-                    Log.i(TAG,urlPath);
+                if (DEBUG) {
+                    Log.i(TAG, urlPath);
                 }
 
                 InputStream stream = null;
@@ -110,8 +110,8 @@ public class NetUtils {
                     conn.setConnectTimeout(CONNECT_TIMEOUT);
                     conn.setReadTimeout(READ_TIMEOUT);
                     int code = conn.getResponseCode();
-                    if(DEBUG) {
-                        Log.i(TAG,"state:"+code);
+                    if (DEBUG) {
+                        Log.i(TAG, "state:" + code);
                     }
                     if (code == 200) {
                         stream = conn.getInputStream();
@@ -123,19 +123,19 @@ public class NetUtils {
                             result.append(temp);
                         }
 
-                        NetDataCache.getInstance().put(urlPath,result.toString());
-                        handleSuccess(response,result.toString());
+                        NetDataCache.getInstance().put(urlPath, result.toString());
+                        handleSuccess(response, result.toString());
                     } else if (code > 500) {
-                            handleError(response,"后台服务异常");
+                        handleError(response, "后台服务异常");
                     } else if (code > 400) {
-                            handleError(response,"网络连接异常");
+                        handleError(response, "网络连接异常");
                     } else {
-                            handleError(response,"未知异常");
+                        handleError(response, "未知异常");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     if (response != null) {
-                        handleError(response,e.getMessage());
+                        handleError(response, e.getMessage());
                     }
                 } finally {
                     if (stream != null) {
@@ -154,18 +154,16 @@ public class NetUtils {
     }
 
 
-
-
     public void post(String path, HashMap<String, String> maps) {
 
     }
 
 
     private void handleError(final NetResponse response, final String error) {
-        if(DEBUG && !TextUtils.isEmpty(error))
-            Log.i(TAG,error);
+        if (DEBUG && !TextUtils.isEmpty(error))
+            Log.i(TAG, error);
 
-        if(response==null)
+        if (response == null)
             return;
 
         handler.post(new Runnable() {
@@ -177,10 +175,10 @@ public class NetUtils {
     }
 
     private void handleSuccess(final NetResponse response, final String result) {
-        if(DEBUG)
-            Log.i(TAG,result);
+        if (DEBUG)
+            logResponse(result);
 
-        if(response==null)
+        if (response == null)
             return;
 
         handler.post(new Runnable() {
@@ -191,13 +189,13 @@ public class NetUtils {
         });
     }
 
-    private HashMap<String,String> getBasicParams(){
-        HashMap<String,String> basic=new HashMap<>();
-        basic.put("osType",NetConfig.osType);
-        basic.put("channel_from",NetConfig.channel_from);
-        basic.put("source",NetConfig.source);
-        basic.put("version",NetConfig.version);
-        basic.put("appType",NetConfig.appType);
+    private HashMap<String, String> getBasicParams() {
+        HashMap<String, String> basic = new HashMap<>();
+        basic.put("osType", NetConfig.osType);
+        basic.put("channel_from", NetConfig.channel_from);
+        basic.put("source", NetConfig.source);
+        basic.put("version", NetConfig.version);
+        basic.put("appType", NetConfig.appType);
 
         return basic;
     }
@@ -206,7 +204,7 @@ public class NetUtils {
         //公共参数
         HashMap<String, String> basicParams = getBasicParams();
         //业务参数
-        if(maps!=null && maps.size()>0) {
+        if (maps != null && maps.size() > 0) {
             basicParams.putAll(maps);
         }
         StringBuilder builder = new StringBuilder();
@@ -226,5 +224,23 @@ public class NetUtils {
         return builder.toString();
     }
 
+
+    private void logResponse(String response) {
+        int division=500;
+        if (response.length() > division) {
+            int chunkCount = response.length() / division;
+            // integer division
+            for (int i = 0; i <= chunkCount; i++) {
+                int max = division * (i + 1);
+                if (max >= response.length()) {
+                    Log.i(TAG, response.substring(division * i));
+                } else {
+                    Log.i(TAG, response.substring(division * i, max));
+                }
+            }
+        } else {
+            Log.i(TAG, response.toString());
+        }
+    }
 
 }

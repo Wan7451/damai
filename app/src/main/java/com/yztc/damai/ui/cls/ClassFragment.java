@@ -56,6 +56,7 @@ public class ClassFragment extends BaseFragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         ClassFragmentAdapter adapter=new ClassFragmentAdapter(getChildFragmentManager(),fragments,titles);
+        //预加载界面的个数
         viewPager.setOffscreenPageLimit(fragments.size());
         viewPager.setAdapter(adapter );
         tabLayout.setupWithViewPager(viewPager);

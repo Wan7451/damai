@@ -62,6 +62,7 @@ public class ClassItemFragment extends LazyFragment {
                 break;
             case 10:
                 type = 200;
+                break;
         }
 
         refreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshView);
@@ -87,9 +88,11 @@ public class ClassItemFragment extends LazyFragment {
         });
 
 
+        //自动加载
         root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                //在布局加载完成之后，才能执行，不然看不到效果
                 refreshLayout.setRefreshing(true);
                 loadData();
                 root.getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -97,13 +100,16 @@ public class ClassItemFragment extends LazyFragment {
         });
 
 
+        //上拉加载
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItem;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        lastVisibleItem + 1 == adapter.getItemCount()) {
+                    //滑动到底部，加载新的数据
                     if (!refreshLayout.isRefreshing()) {
                         refreshLayout.setRefreshing(true);
                         addData();
@@ -117,7 +123,6 @@ public class ClassItemFragment extends LazyFragment {
 
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 if (layoutManager instanceof LinearLayoutManager) {
-
                     int last = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
                     if (last != -1) {
                         lastVisibleItem = last;
@@ -146,6 +151,7 @@ public class ClassItemFragment extends LazyFragment {
                 try {
                     JSONObject object = new JSONObject(response);
                     if (!object.has("l")) {
+                        // 数据全部加载
                         showErrorHint();
                         return;
                     }
@@ -215,8 +221,10 @@ public class ClassItemFragment extends LazyFragment {
         });
     }
 
+    //显示数据空 的效果
     private void showErrorView() {
         if (emptyView == null) {
+            //ViewStub 只能加载一次
             emptyView = stubView.inflate();
         }
         emptyView.setVisibility(View.VISIBLE);
