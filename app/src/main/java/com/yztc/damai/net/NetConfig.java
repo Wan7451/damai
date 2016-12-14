@@ -9,6 +9,7 @@ package com.yztc.damai.net;
 public class NetConfig {
 
     public static final String BASE_URL="http://mapi.damai.cn/";
+    public static final String BASE_URL2="http://api.m.damai.cn/";
 //    public static final String BASE_URL="http://mapi.damai.cn/";
 
     public static final String osType="2";

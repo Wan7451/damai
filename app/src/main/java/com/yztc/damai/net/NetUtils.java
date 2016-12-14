@@ -60,22 +60,16 @@ public class NetUtils {
     }
 
 
-    public void get(final String path, final HashMap<String, String> maps, final NetResponse response) {
-
-//        if(!NetStatusUtils.isConnect()){
-//            ToastUtils.show("网络无连接");
-//            handleError(response,"网络无连接");
-//            return;
-//        }
-
-
+    public void get(final String baseUrl,
+                    final String path,
+                    final HashMap<String, String> maps,
+                    final NetResponse response) {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
 
-
                 //拼接URL地址
-                StringBuilder builder = new StringBuilder(NetConfig.BASE_URL);
+                StringBuilder builder = new StringBuilder(baseUrl);
                 builder.append(path);
                 //添加参数
                 builder.append("?");
@@ -156,6 +150,13 @@ public class NetUtils {
     }
 
 
+    public void get(String path,
+                    HashMap<String, String> maps,
+                    NetResponse response) {
+        get(NetConfig.BASE_URL, path, maps, response);
+    }
+
+
     public void post(String path, HashMap<String, String> maps) {
 
     }
@@ -228,7 +229,7 @@ public class NetUtils {
 
 
     private void logResponse(String response) {
-        int division=500;
+        int division = 500;
         if (response.length() > division) {
             int chunkCount = response.length() / division;
             // integer division

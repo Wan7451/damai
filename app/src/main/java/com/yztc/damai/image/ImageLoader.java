@@ -3,6 +3,7 @@ package com.yztc.damai.image;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
@@ -104,6 +105,9 @@ public class ImageLoader {
 
 
     private Bitmap getBitmapFromCache(String imageUrl) {
+        if(TextUtils.isEmpty(imageUrl)){
+            return null;
+        }
         Bitmap bitmap = mLruCache.get(imageUrl);
         if (bitmap != null) {
             return bitmap;
