@@ -17,19 +17,27 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.Buffer;
 import java.nio.charset.Charset;
+import java.util.Date;
 
 /**
  * Created by wanggang on 2016/12/13.
  */
 
+/**
+ * 数据缓存
+ * 数据缓存时间
+ */
 public class NetDataCache {
 
     private static NetDataCache instance;
 
     private static final int CACHE_SIZE = 10 * 1024 * 1024;
-    private static final int CACHE_TIMEOUT = 10 * 60 * 1000;
+    private static final int CACHE_TIMEOUT = 1 * 60 * 1000;//30分钟
 
     private DiskLruCache mDiskLruCache;
+
+    public static final boolean DEBUG=true;
+    public static final String TAG="==CACHE==>";
 
 
     public static NetDataCache getInstance() {
@@ -63,11 +71,12 @@ public class NetDataCache {
         String keyForDisk = getKey(key);
         DiskLruCache.Editor edit = null;
         BufferedWriter bw = null;
-
-        StringBuilder builder=new StringBuilder();
+        //生成超时时间
+        StringBuilder builder = new StringBuilder();
         builder.append("<! TIME_OUT:");
-        builder.append(System.currentTimeMillis()+CACHE_TIMEOUT);
+        builder.append(System.currentTimeMillis() + CACHE_TIMEOUT);
         builder.append(" !>\n");
+        //加入 文件中
         builder.append(data);
 
         try {
@@ -104,26 +113,29 @@ public class NetDataCache {
             inputStream = get(key);
             if (inputStream == null) return null;
             StringBuilder sb = new StringBuilder();
-            BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
-            String temp=null;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+            String temp = null;
             while ((temp = reader.readLine()) != null) {
-                sb.append(temp);
-            }
-            String data= sb.toString();
-
-            if(data.startsWith("<!")) {
-                String time = data.substring(12, 25);
-                Long t=Long.parseLong(time);
-                if(System.currentTimeMillis()-t>CACHE_TIMEOUT){
-                    //超时
-                    mDiskLruCache.remove(getKey(key));
-                    return "";
+                if (temp.startsWith("<! TIME_OUT:")) {
+                    //读取超时时间
+                    String time = temp.substring(12, 25);
+                    Long t = Long.parseLong(time);
+                    if(DEBUG)
+                    Log.i(TAG,"CACHE_TIME_OUT=="+new Date(t).toString());
+                    if (System.currentTimeMillis() - t > 0) {
+                        if(DEBUG) {
+                            Log.i(TAG,"CACHE_TIME_OUT");
+                        }
+                        //超时
+                        inputStream.close();
+                        mDiskLruCache.remove(getKey(key));
+                        return "";
+                    }
+                } else {
+                    sb.append(temp);
                 }
-                int indexOf = data.indexOf("{");
-                data=data.substring(indexOf,data.length());
             }
-
-            return data;
+            return sb.toString();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,12 +151,11 @@ public class NetDataCache {
 
     private InputStream get(String key) {
         try {
-            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(getKey(key));
+            DiskLruCache.Snapshot snapshot =
+                    mDiskLruCache.get(getKey(key));
             if (snapshot == null) {
-                //not find entry , or entry.readable = false
                 return null;
             }
-            //write READ
             return snapshot.getInputStream(0);
         } catch (IOException e) {
             e.printStackTrace();
@@ -152,7 +163,7 @@ public class NetDataCache {
         }
     }
 
-    private String getKey(String key){
+    private String getKey(String key) {
         return MD5Utils.hashKeyForDisk(key);
     }
 }

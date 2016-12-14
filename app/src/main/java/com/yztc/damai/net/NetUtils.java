@@ -82,6 +82,8 @@ public class NetUtils {
                 builder.append(buildParams(maps));
                 String urlPath = builder.toString();
 
+                //从本地缓存取数据
+                //30分钟   缓存超时   返回空
                 String cache = NetDataCache.getInstance().getAsString(urlPath);
 
                 if (!TextUtils.isEmpty(cache)) {
@@ -122,7 +124,7 @@ public class NetUtils {
                         while ((temp = reader.readLine()) != null) {
                             result.append(temp);
                         }
-
+                        //缓存JSO
                         NetDataCache.getInstance().put(urlPath, result.toString());
                         handleSuccess(response, result.toString());
                     } else if (code > 500) {
