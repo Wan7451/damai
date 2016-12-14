@@ -32,7 +32,7 @@ public class NetDataCache {
     private static NetDataCache instance;
 
     private static final int CACHE_SIZE = 10 * 1024 * 1024;
-    private static final int CACHE_TIMEOUT = 1 * 60 * 1000;//30分钟
+    private static final int CACHE_TIMEOUT = 30 * 60 * 1000;//30分钟
 
     private DiskLruCache mDiskLruCache;
 
