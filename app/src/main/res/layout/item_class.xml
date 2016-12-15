@@ -39,7 +39,7 @@
                 android:id="@+id/class_seat"
                 android:padding="3dp"
                 android:textColor="#FFF"
-                android:textSize="10dp"
+                android:textSize="10sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/green"/>
@@ -47,7 +47,7 @@
             <TextView
                 android:id="@+id/class_state"
                 android:padding="3dp"
-                android:textSize="10dp"
+                android:textSize="10sp"
                 android:layout_marginLeft="10dp"
                 android:textColor="#FFF"
                 android:layout_width="wrap_content"

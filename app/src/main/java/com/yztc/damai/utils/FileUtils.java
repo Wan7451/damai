@@ -16,11 +16,11 @@ public class FileUtils {
         File root;
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             // sdcard/android/data/包名/cache
-            root=App.context.getExternalCacheDir();
+            root=App.getContext().getExternalCacheDir();
             //Environment.getExternalStorageDirectory()
         }else {
             // /data/data/包名/cache
-            root=App.context.getCacheDir();
+            root=App.getContext().getCacheDir();
         }
         return root;
     }

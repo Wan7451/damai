@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         if(System.currentTimeMillis()-curr>2000){
             curr=System.currentTimeMillis();
         }else {
-            App.instance.onDestory();
+            App.getContext().onDestory();
             super.onBackPressed();
         }
     }

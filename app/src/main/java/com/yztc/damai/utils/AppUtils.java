@@ -13,8 +13,8 @@ public class AppUtils {
 
     public static int getAppVersion() {
         try {
-            PackageManager manager = App.context.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(App.context.getPackageName(), 0);
+            PackageManager manager = App.getContext().getPackageManager();
+            PackageInfo info = manager.getPackageInfo(App.getContext().getPackageName(), 0);
             return info.versionCode;
         } catch (Exception e) {
             e.printStackTrace();

@@ -18,7 +18,7 @@ public class NetStatusUtils {
 
 
         ConnectivityManager mgr= (ConnectivityManager)
-             App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+             App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = mgr.getActiveNetworkInfo();
         if(netInfo!=null){
             return netInfo.isConnected();

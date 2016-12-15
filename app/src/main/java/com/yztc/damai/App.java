@@ -16,15 +16,16 @@ public class App extends Application {
     //Activity、Service Context
     //1 全局
     //2 生命周期长
-    public static Context context;
-
-    public static App instance;
+    private static App context;
 
     @Override
     public void onCreate() {
         super.onCreate();
         context=this;
-        instance=this;
+    }
+
+    public static App getContext(){
+        return context;
     }
 
     //结束
