@@ -114,7 +114,7 @@ public class BannerView extends FrameLayout {
         // 6  100%6   100-4   96
         int startPage = 100;
         int extra = startPage % data.size();
-        startPage = startPage - extra;
+        startPage = startPage - extra-1;
         //position 起点
         viewPager.setCurrentItem(startPage);
 
@@ -139,7 +139,7 @@ public class BannerView extends FrameLayout {
                     }
                 });
             }
-        }, AUTO_SCROLL_TIME, AUTO_SCROLL_TIME);
+        }, 0, AUTO_SCROLL_TIME);
 
     }
 

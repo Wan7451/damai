@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.yztc.damai.R;
 import com.yztc.damai.image.ImageLoader;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class BannerViewAdapter extends PagerAdapter {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         view.setLayoutParams(lp);
-
+        view.setImageResource(R.mipmap.ic_launcher);
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return view;
     }

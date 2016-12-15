@@ -74,7 +74,7 @@ public class RecommendFragment extends Fragment {
                     Gson gson=new Gson();
                     banners.clear();
                     bannerStr.clear();
-                    for (int i = 0 ,len=2; i < len ; i++) {
+                    for (int i = 0 ,len=array.length(); i < len ; i++) {
                         banners.add(gson.fromJson(array.getString(i),BannerBean.class));
                         bannerStr.add(array.getJSONObject(i).getString("Pic"));
                     }

@@ -36,8 +36,8 @@ public class NetDataCache {
 
     private DiskLruCache mDiskLruCache;
 
-    public static final boolean DEBUG=true;
-    public static final String TAG="==CACHE==>";
+    private static final boolean DEBUG=true;
+    private static final String TAG="==CACHE==>";
 
 
     public static NetDataCache getInstance() {
@@ -165,5 +165,14 @@ public class NetDataCache {
 
     private String getKey(String key) {
         return MD5Utils.hashKeyForDisk(key);
+    }
+
+    public void onDestroy() {
+        instance = null;
+        try {
+            mDiskLruCache.close();
+            mDiskLruCache = null;
+        } catch (IOException e) {
+        }
     }
 }
