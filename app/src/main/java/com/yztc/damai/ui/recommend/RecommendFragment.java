@@ -55,7 +55,7 @@ public class RecommendFragment extends Fragment {
         bannerView.setOnBannerViewClick(new BannerViewPager.OnBannerViewClick() {
             @Override
             public void onBannerViewClick(int position) {
-                ToastUtils.show(banners.get(position%banners.size()).getName());
+                ToastUtils.show(banners.get(position).getName());
             }
         });
     }
@@ -74,7 +74,7 @@ public class RecommendFragment extends Fragment {
                     Gson gson=new Gson();
                     banners.clear();
                     bannerStr.clear();
-                    for (int i = 0 ,len=4; i < len ; i++) {
+                    for (int i = 0 ,len=2; i < len ; i++) {
                         banners.add(gson.fromJson(array.getString(i),BannerBean.class));
                         bannerStr.add(array.getJSONObject(i).getString("Pic"));
                     }

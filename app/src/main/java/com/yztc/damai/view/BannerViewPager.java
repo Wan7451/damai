@@ -8,10 +8,14 @@ import android.view.View;
 
 /**
  * Created by wanggang on 2016/12/14.
+ *
+ * 点击
+ * 触摸
+ *
  */
 
 public class BannerViewPager extends ViewPager {
-    private boolean scrollEnable=true;
+
 
     public BannerViewPager(Context context) {
         super(context);
@@ -21,7 +25,8 @@ public class BannerViewPager extends ViewPager {
         super(context, attrs);
     }
 
-
+    //是否可以滑动
+    private boolean scrollEnable=true;
     private float x, y;
     private OnBannerViewClick l;
     private OnAutoSlideEnableListner enable;
@@ -51,7 +56,7 @@ public class BannerViewPager extends ViewPager {
 
                 x = ev.getX();
                 y = ev.getY();
-
+                //不能进行轮播
                 if(enable!=null){
                     enable.onAutoSlideEnable(false);
                 }
@@ -62,8 +67,10 @@ public class BannerViewPager extends ViewPager {
                 if (x == ev.getX()
                         && y == ev.getY()
                         && l != null) {
+                    //点击事件
                     l.onBannerViewClick(getCurrentItem());
                 }
+                //进行轮播
                 if(enable!=null){
                     enable.onAutoSlideEnable(true);
                 }
@@ -73,15 +80,18 @@ public class BannerViewPager extends ViewPager {
         return super.onTouchEvent(ev);
     }
 
+    // 只有1个item  是否可以滑动
     public void setScrollEnable(boolean scrollEnable) {
         this.scrollEnable = scrollEnable;
     }
 
 
+    //点击事件
     public interface OnBannerViewClick {
         void onBannerViewClick(int position);
     }
 
+    //是否可以轮播
     public interface OnAutoSlideEnableListner{
         void onAutoSlideEnable(boolean isEnadle);
     }

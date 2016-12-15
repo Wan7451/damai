@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 /**
  * Created by wanggang on 2016/12/14.
+ *
+ *
+ * 无限循环   ViewPager
  */
 
 public class BannerViewAdapter extends PagerAdapter {
@@ -24,15 +27,19 @@ public class BannerViewAdapter extends PagerAdapter {
     public BannerViewAdapter(Context context, ArrayList<String> data) {
         this.context = context;
         this.imageLoader = ImageLoader.getInstance();
-        views = new ArrayList<>();
-        datas = new ArrayList<>();
-        addBannerViews(data);
+        views = new ArrayList<>();  //所有的要显示的组件
+        datas = new ArrayList<>();  //要显示的数据
+        addBannerViews(data);       //生成 views
     }
 
 
     private void addBannerViews(ArrayList<String> data) {
         views.clear();
+        datas.clear();
+
+        //数据集合
         datas.addAll(data);
+
         int len = datas.size();
 
         if (len == 1) {
@@ -40,11 +47,14 @@ public class BannerViewAdapter extends PagerAdapter {
             return;
         }
 
-        //确保views的数量大于5
+        //当数据集合长度小于5，适配器出问题
+        //要避免这个问题，可以增加数据集合的长度
+        // 确保views的数量大于5
         while (len < 5) {
-            len = len * 2;
             datas.addAll(data);
+            len=datas.size();
         }
+
         for (int i = 0; i < len; i++) {
             views.add(generateView());
         }
