@@ -7,12 +7,15 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.yztc.damai.R;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -108,8 +111,32 @@ public class BannerView extends FrameLayout {
         }
 
         viewPager.addOnPageChangeListener(new PagerListener());
+//        ViewPager.PageTransformer pageTransformer=new ViewPager.PageTransformer() {
+//            @Override
+//            public void transformPage(View page, float position) {
+//                page.setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_out_right));
+//            }
+//        };
+//        viewPager.setPageTransformer(true, pageTransformer);
 
-        //设置每次加载时第一页在MAX_VALUE / 2 - Extra 页，
+        // 设置滑动速度
+        FixedSpeedScroller mScroller = null;
+        try {
+            Field mField = null;
+
+            mField = ViewPager.class.getDeclaredField("mScroller");
+            mField.setAccessible(true);
+
+            mScroller = new FixedSpeedScroller(
+                    viewPager.getContext(),
+                    new AccelerateInterpolator());
+            mScroller.setmDuration(800); // 2000ms
+            mField.set(viewPager, mScroller);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // /设置每次加载时第一页在MAX_VALUE / 2 - Extra 页，
         //造成用户无限轮播的错觉
         // 6  100%6   100-4   96
         int startPage = 100;
