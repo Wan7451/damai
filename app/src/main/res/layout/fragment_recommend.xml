@@ -1,20 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.yztc.damai.ui.recommend.RecommendFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <com.yztc.damai.view.BannerView
-        android:id="@+id/bannerView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         />
+        android:orientation="vertical">
 
-    <com.yztc.damai.ui.recommend.ClassifyView
-        android:id="@+id/classifyView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <com.yztc.damai.view.BannerView
+            android:id="@+id/bannerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-</LinearLayout>
+        <com.yztc.damai.ui.recommend.ClassifyView
+            android:id="@+id/classifyView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/recommendContainer"
+            />
+
+    </LinearLayout>
+</ScrollView>

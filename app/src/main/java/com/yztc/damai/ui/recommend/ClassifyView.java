@@ -68,11 +68,12 @@ public class ClassifyView extends RelativeLayout {
          adapter = new ClassifyAdapter(getContext(), classifys);
         classifyGrid.setAdapter(adapter);
 
+        //动画  文字切换的效果
         Animation in = AnimationUtils.loadAnimation(getContext(), R.anim.push_up_in);
         Animation out = AnimationUtils.loadAnimation(getContext(), R.anim.push_up_out);
         classifyHot.setInAnimation(in);
         classifyHot.setOutAnimation(out);
-
+        //文字显示的效果
         classifyHot.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -104,6 +105,7 @@ public class ClassifyView extends RelativeLayout {
                     @Override
                     public void run() {
                         HeadLineBean bean = headLines.get(posotion++ % headLines.size());
+                        //显示的文字
                         classifyHot.setText(bean.getText());
                     }
                 });

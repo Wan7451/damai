@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yztc.damai.R;
+import com.yztc.damai.net.NetConfig;
 import com.yztc.damai.ui.cls.ClassBean;
 import com.yztc.damai.image.ImageLoader;
 
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 
 public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String BASR_IMG = "http://pimg.damai.cn/perform/project/";
+
 
     private ArrayList<ClassBean> data;
     private Context context;
@@ -68,7 +69,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             String i = String.valueOf(clsBean.getI());
 
-            String imageURI = BASR_IMG + i.substring(0, i.length()-2) + "/" + i + "_n.jpg";
+            String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length()-2) + "/" + i + "_n.jpg";
 
             ImageLoader.getInstance().loadImages(clsHolder.classImg, imageURI, false);
         }

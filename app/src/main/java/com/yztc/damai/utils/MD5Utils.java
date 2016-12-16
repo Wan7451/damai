@@ -27,7 +27,6 @@ public class MD5Utils {
 				sb.append(hex);
 			}
 			cacheKey = sb.toString();
-			sb = null;
 		} catch (NoSuchAlgorithmException e) {
 			cacheKey = String.valueOf(key.hashCode());
 		}

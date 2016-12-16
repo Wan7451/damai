@@ -12,6 +12,8 @@ public class NetConfig {
     public static final String BASE_URL2="http://api.m.damai.cn/";
 //    public static final String BASE_URL="http://mapi.damai.cn/";
 
+    public static final String BASR_IMG = "http://pimg.damai.cn/perform/project/";
+
     public static final String osType="2";
 
     public static final String channel_from="xiaomi_market";
