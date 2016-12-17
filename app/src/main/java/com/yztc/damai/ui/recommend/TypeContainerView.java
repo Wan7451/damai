@@ -33,8 +33,9 @@ public abstract class TypeContainerView extends LinearLayout {
             addView(new DivierView(getContext()));
             addView(title);
         }
-        fillTypeView(data);
         //内容
+        fillTypeView(data);
+
     }
 
     protected abstract void fillTypeView(TypeViewBean data);

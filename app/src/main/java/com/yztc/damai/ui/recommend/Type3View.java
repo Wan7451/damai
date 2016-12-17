@@ -40,7 +40,6 @@ public class Type3View extends TypeContainerView {
 
         int widthPixels = getResources().getDisplayMetrics().widthPixels;
 
-
         typeGridContainer.setColumnCount(2);
 
         List<TypeViewDataBean> dataList = data.getList();
@@ -54,7 +53,7 @@ public class Type3View extends TypeContainerView {
                 ImageLoader.getInstance().loadImages(img, dataList.get(i).getPicUrl(), false);
                 GridLayout.Spec columnSpec = GridLayout.spec(y);
                 GridLayout.Spec rowSpec;
-                //设置跨列
+                //设置跨行
                 if (i % 3 == 0) {
                     rowSpec = GridLayout.spec(x, 2);     //设置它的行和列
                 } else {

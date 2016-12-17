@@ -139,11 +139,11 @@ public class BannerView extends FrameLayout {
         // /设置每次加载时第一页在MAX_VALUE / 2 - Extra 页，
         //造成用户无限轮播的错觉
         // 6  100%6   100-4   96
-        int startPage = 100;
-        int extra = startPage % data.size();
-        startPage = startPage - extra-1;
-        //position 起点
-        viewPager.setCurrentItem(startPage);
+//        int startPage = 100;
+//        int extra = startPage % data.size();
+//        startPage = startPage - extra;
+//        //position 起点
+//        viewPager.setCurrentItem(data.size()*10,false);
 
         //添加指示器
         int count = data.size();
@@ -166,7 +166,7 @@ public class BannerView extends FrameLayout {
                     }
                 });
             }
-        }, 0, AUTO_SCROLL_TIME);
+        }, AUTO_SCROLL_TIME, AUTO_SCROLL_TIME);
 
     }
 

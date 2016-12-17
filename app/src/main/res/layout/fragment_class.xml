@@ -1,24 +1,52 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context="com.yztc.damai.ui.cls.ClassFragment">
 
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/red"
-        app:tabTextColor="@color/text_title"
-        app:tabSelectedTextColor="@color/red"
-        />
+        android:layout_height="wrap_content">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="北京"
+                android:textColor="@android:color/white" />
+
+        </android.support.v7.widget.Toolbar>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/red"
+            app:tabSelectedTextColor="@color/red"
+            app:tabTextColor="@color/text_title" />
+
+        <android.support.v4.view.ViewPager
+
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

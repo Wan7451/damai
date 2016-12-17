@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
@@ -38,6 +39,7 @@ public class Type6View extends TypeContainerView {
     @Override
     protected void fillTypeView(final TypeViewBean data) {
         RecyclerView recycler=new RecyclerView(getContext());
+        recycler.setNestedScrollingEnabled(false);
         LinearLayoutManager mgr=new LinearLayoutManager(getContext());
         mgr.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycler.setLayoutManager(mgr);
@@ -71,4 +73,5 @@ public class Type6View extends TypeContainerView {
             }
         });
     }
+
 }

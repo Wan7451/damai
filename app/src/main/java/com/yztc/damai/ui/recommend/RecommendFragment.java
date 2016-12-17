@@ -2,8 +2,11 @@ package com.yztc.damai.ui.recommend;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,10 @@ import com.yztc.damai.R;
 import com.yztc.damai.net.NetConfig;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.utils.DensityUtil;
 import com.yztc.damai.utils.ToastUtils;
 import com.yztc.damai.view.BannerView;
 import com.yztc.damai.view.BannerViewPager;
-import com.yztc.damai.view.DivierView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +32,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecommendFragment extends Fragment {
+public class RecommendFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.bannerView)
     BannerView bannerView;
@@ -37,6 +40,10 @@ public class RecommendFragment extends Fragment {
     ClassifyView classifyView;
     @BindView(R.id.recommendContainer)
     LinearLayout recommendContainer;
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
     private ArrayList<BannerBean> banners = new ArrayList<>();
     private ArrayList<String> bannerStr = new ArrayList<>();
 
@@ -67,6 +74,19 @@ public class RecommendFragment extends Fragment {
         netUtils = NetUtils.getInstance();
         initBannerView(view);
         loadBanner();
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset >= 0) {
+                    mSwipeRefreshLayout.setEnabled(true);
+                } else {
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            }
+        });
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setProgressViewOffset(true, 0, DensityUtil.dip2px(getContext(),100));
     }
 
 
@@ -100,17 +120,17 @@ public class RecommendFragment extends Fragment {
                                 recommendContainer.addView(v1);
                                 break;
                             case 2:
-                                Type2View v2=new Type2View(getContext());
+                                Type2View v2 = new Type2View(getContext());
                                 v2.setData(typeViewBean);
                                 recommendContainer.addView(v2);
                                 break;
                             case 3:
-                                Type3View v3=new Type3View(getContext());
+                                Type3View v3 = new Type3View(getContext());
                                 v3.setData(typeViewBean);
                                 recommendContainer.addView(v3);
                                 break;
                             case 6:
-                                Type6View v6=new Type6View(getContext());
+                                Type6View v6 = new Type6View(getContext());
                                 v6.setData(typeViewBean);
                                 recommendContainer.addView(v6);
                                 break;
@@ -132,8 +152,6 @@ public class RecommendFragment extends Fragment {
 
                         }
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -196,4 +214,15 @@ public class RecommendFragment extends Fragment {
                     }
                 });
     }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        },2000);
+    }
+
 }
