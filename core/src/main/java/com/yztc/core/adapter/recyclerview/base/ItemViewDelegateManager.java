@@ -7,6 +7,7 @@ import android.support.v4.util.SparseArrayCompat;
  * Created by wanggang on 2016/12/18.
  */
 public class ItemViewDelegateManager<T> {
+
     SparseArrayCompat<ItemViewDelegate<T>> delegates = new SparseArrayCompat();
 
     public int getItemViewDelegateCount() {

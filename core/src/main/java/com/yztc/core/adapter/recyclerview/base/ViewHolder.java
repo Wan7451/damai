@@ -22,6 +22,11 @@ import android.widget.TextView;
 
 /**
  * Created by wanggang on 2016/12/18.
+ *
+ *
+ *
+ * ViewHolder
+ * 用于减少 findViewById 的调用次数
  */
 public class ViewHolder extends RecyclerView.ViewHolder {
     private SparseArray<View> mViews;

@@ -5,6 +5,9 @@ import android.view.View;
 
 /**
  * Created by wanggang on 2016/12/18.
+ *
+ * 适配器 不同ItemView 的 封装
+ *
  */
 public interface ItemViewDelegate<T> {
 
