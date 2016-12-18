@@ -1,6 +1,7 @@
 package com.yztc.damai.ui.recommend;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.yztc.core.utils.DensityUtil;
@@ -21,6 +23,7 @@ import com.yztc.damai.R;
 import com.yztc.damai.net.NetConfig;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.ui.others.ChoiceCityActivity;
 import com.yztc.damai.view.ClassifyView;
 import com.yztc.damai.view.Type10View;
 import com.yztc.damai.view.Type11View;
@@ -39,6 +42,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class RecommendFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -52,6 +56,8 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.appBarLayout)
     AppBarLayout appBarLayout;
+    @BindView(R.id.choiceCity)
+    TextView choiceCity;
     private ArrayList<BannerBean> banners = new ArrayList<>();
     private ArrayList<String> bannerStr = new ArrayList<>();
 
@@ -94,7 +100,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setProgressViewOffset(true, 0, DensityUtil.dip2px(getContext(),100));
+        mSwipeRefreshLayout.setProgressViewOffset(true, 0, DensityUtil.dip2px(getContext(), 100));
     }
 
 
@@ -230,7 +236,16 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-        },2000);
+        }, 2000);
     }
 
+    @OnClick(R.id.choiceCity)
+    public void onClick() {
+        ChoiceCityActivity.startForResult(this, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

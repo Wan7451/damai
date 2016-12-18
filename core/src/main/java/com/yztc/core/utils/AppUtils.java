@@ -22,4 +22,22 @@ public class AppUtils {
             return 1;
         }
     }
+
+    /**
+     * 获取应用程序名称
+     */
+    public static String getAppName() {
+        try {
+            PackageManager packageManager = App.getContext().getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(
+                    App.getContext().getPackageName(), 0);
+            int labelRes = packageInfo.applicationInfo.labelRes;
+            return App.getContext().getResources().getString(labelRes);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

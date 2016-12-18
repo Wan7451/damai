@@ -9,16 +9,17 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebSettings;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.yztc.core.image.ImageLoader;
 import com.yztc.damai.R;
-import com.yztc.damai.ui.recommend.ClassifyAdapter;
 import com.yztc.damai.ui.recommend.ClassifyBean;
 import com.yztc.damai.ui.recommend.HeadLineBean;
 
@@ -121,4 +122,53 @@ public class ClassifyView extends RelativeLayout {
             timer=null;
         }
     }
+
+
+    static class ClassifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private Context context;
+        private LayoutInflater inflater;
+        private ArrayList<ClassifyBean> classifys;
+
+        public ClassifyAdapter(Context context, ArrayList<ClassifyBean> classifys) {
+            this.context = context;
+            inflater = LayoutInflater.from(context);
+            this.classifys = classifys;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = inflater.inflate(R.layout.item_classify, null);
+            return new ClassifyAdapter.ClassifyHolder(view);
+
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof ClassifyAdapter.ClassifyHolder) {
+                ((ClassifyAdapter.ClassifyHolder) holder).classifyIcon.setImageResource(R.mipmap.ic_launcher);
+                ImageLoader.getInstance().loadImages(((ClassifyAdapter.ClassifyHolder) holder).classifyIcon, classifys.get(position).getImg(), false);
+                ((ClassifyAdapter.ClassifyHolder) holder).classifyTitle.setText(classifys.get(position).getName());
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return classifys != null ? classifys.size() : 0;
+        }
+
+        static class ClassifyHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.classify_icon)
+            ImageView classifyIcon;
+
+            @BindView(R.id.classify_title)
+            TextView classifyTitle;
+
+            ClassifyHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
+    }
+
 }

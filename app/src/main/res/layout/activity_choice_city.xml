@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_choice_city"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yztc.damai.ui.others.ChoiceCityActivity">
+
+    <com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView
+        android:id="@+id/cityList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <com.yztc.damai.view.SideBar
+        android:id="@+id/sideBar"
+        android:layout_width="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp" />
+
+</RelativeLayout>

@@ -3,6 +3,7 @@ package com.yztc.core.views.banner;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -16,8 +17,6 @@ import com.yztc.core.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by wanggang on 2016/12/14.
@@ -33,6 +32,7 @@ public class BannerView extends FrameLayout {
 
     //轮播时间
     private static final int AUTO_SCROLL_TIME=3000;
+    private static final int MSG_AUTO_SCROLL = 100;
 
     //代码中使用
     public BannerView(Context context) {
@@ -47,12 +47,11 @@ public class BannerView extends FrameLayout {
 
     private BannerViewPager viewPager;
     private RadioGroup indicate;
-    private Timer timer;
     private Handler handler;
     private BannerViewAdapter adapter;
     private ArrayList<String> data;
 
-    private boolean isGoNext=true;
+
 
     private void init() {
         //设置布局
@@ -68,15 +67,21 @@ public class BannerView extends FrameLayout {
         //直接将v  add到Parent中    自定义Vew
         //inflater.inflate(R.layout.view_banner,parent,true);
 
+        handler = new H();
+        handler.sendEmptyMessageDelayed(MSG_AUTO_SCROLL, AUTO_SCROLL_TIME);
 
         viewPager = (BannerViewPager) findViewById(R.id.view_pager);
         indicate = (RadioGroup) findViewById(R.id.view_indicate);
-        timer = new Timer();
         handler = new Handler(Looper.getMainLooper());
         viewPager.setOnAutoSlideEnableListner(new BannerViewPager.OnAutoSlideEnableListner() {
             @Override
             public void onAutoSlideEnable(boolean isEnadle) {
-                isGoNext=isEnadle;
+                if (isEnadle) {
+                    handler.removeMessages(MSG_AUTO_SCROLL);
+                    handler.sendEmptyMessageDelayed(MSG_AUTO_SCROLL, AUTO_SCROLL_TIME);
+                } else {
+                    handler.removeMessages(MSG_AUTO_SCROLL);
+                }
             }
         });
     }
@@ -150,22 +155,6 @@ public class BannerView extends FrameLayout {
             indicate.addView(generateIndicateView(i));
         }
 
-        //定时器 自定滚动
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //是否进行轮播
-                        if(!isGoNext)
-                            return;
-                        int position = viewPager.getCurrentItem();
-                        viewPager.setCurrentItem(position + 1);
-                    }
-                });
-            }
-        }, AUTO_SCROLL_TIME, AUTO_SCROLL_TIME);
 
     }
 
@@ -184,12 +173,6 @@ public class BannerView extends FrameLayout {
         return btn;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (timer != null)
-            timer.cancel();
-    }
 
 
      class PagerListener implements ViewPager.OnPageChangeListener{
@@ -213,4 +196,20 @@ public class BannerView extends FrameLayout {
         }
     }
 
+    private class H extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_AUTO_SCROLL:
+                    viewPager.setCurrentItem(
+                            viewPager.getCurrentItem() + 1);
+                    sendEmptyMessageDelayed(MSG_AUTO_SCROLL,
+                            AUTO_SCROLL_TIME);
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+        }
+    }
 }
