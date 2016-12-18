@@ -13,14 +13,22 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
+import com.yztc.core.utils.DensityUtil;
+import com.yztc.core.utils.ToastUtils;
+import com.yztc.core.views.banner.BannerView;
+import com.yztc.core.views.banner.BannerViewPager;
 import com.yztc.damai.R;
 import com.yztc.damai.net.NetConfig;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
-import com.yztc.damai.utils.DensityUtil;
-import com.yztc.damai.utils.ToastUtils;
-import com.yztc.damai.view.BannerView;
-import com.yztc.damai.view.BannerViewPager;
+import com.yztc.damai.view.ClassifyView;
+import com.yztc.damai.view.Type10View;
+import com.yztc.damai.view.Type11View;
+import com.yztc.damai.view.Type12View;
+import com.yztc.damai.view.Type1View;
+import com.yztc.damai.view.Type2View;
+import com.yztc.damai.view.Type3View;
+import com.yztc.damai.view.Type6View;
 
 import org.json.JSONArray;
 import org.json.JSONException;

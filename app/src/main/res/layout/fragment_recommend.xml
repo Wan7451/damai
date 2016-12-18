@@ -27,8 +27,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-
-            <com.yztc.damai.view.BannerView
+            <com.yztc.core.views.banner.BannerView
                 android:id="@+id/bannerView"
                 android:layout_width="match_parent"
                 android:layout_height="185dp"
@@ -67,7 +66,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical">
 
 
-            <com.yztc.damai.ui.recommend.ClassifyView
+            <com.yztc.damai.view.ClassifyView
                 android:id="@+id/classifyView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

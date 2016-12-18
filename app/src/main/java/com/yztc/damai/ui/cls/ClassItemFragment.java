@@ -2,7 +2,6 @@ package com.yztc.damai.ui.cls;
 
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.*;
@@ -11,11 +10,11 @@ import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 
 import com.google.gson.Gson;
+import com.yztc.core.base.LazyFragment;
+import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.R;
-import com.yztc.damai.base.LazyFragment;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
-import com.yztc.damai.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yztc.core.image.ImageLoader;
 import com.yztc.damai.R;
 import com.yztc.damai.net.NetConfig;
 import com.yztc.damai.ui.cls.ClassBean;
-import com.yztc.damai.image.ImageLoader;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,5 @@
 package com.yztc.damai;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -13,12 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.ui.cls.ClassFragment;
-import com.yztc.damai.ui.cls.ClassItemFragment;
 import com.yztc.damai.ui.discover.DiscoverFragment;
 import com.yztc.damai.ui.mine.MineFragment;
 import com.yztc.damai.ui.recommend.RecommendFragment;
-import com.yztc.damai.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yztc.core.base.BaseFragment;
 import com.yztc.damai.R;
-import com.yztc.damai.base.BaseFragment;
 
 import java.util.ArrayList;
 

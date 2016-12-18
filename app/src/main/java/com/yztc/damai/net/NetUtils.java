@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.yztc.damai.utils.ToastUtils;
+import com.yztc.core.net.NetDataCache;
 
 import java.io.BufferedReader;
 import java.io.IOException;
