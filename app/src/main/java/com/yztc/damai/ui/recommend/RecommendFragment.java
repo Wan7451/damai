@@ -1,7 +1,7 @@
 package com.yztc.damai.ui.recommend;
 
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,6 +21,7 @@ import com.yztc.core.views.banner.BannerView;
 import com.yztc.core.views.banner.BannerViewPager;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
+import com.yztc.damai.help.Event;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 import com.yztc.damai.ui.others.ChoiceCityActivity;
@@ -33,6 +34,8 @@ import com.yztc.damai.view.Type2View;
 import com.yztc.damai.view.Type3View;
 import com.yztc.damai.view.Type6View;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -241,11 +244,28 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
 
     @OnClick(R.id.choiceCity)
     public void onClick() {
-        ChoiceCityActivity.startForResult(this, 1);
+        ChoiceCityActivity.start(getContext());
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onChange(Event event) {
+        switch (event.getType()) {
+            case Event.EVENT_CITY_CHANGE:
+                //reload();
+                break;
+        }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

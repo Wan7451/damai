@@ -3,11 +3,11 @@ package com.yztc.damai.ui.others;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,10 +16,15 @@ import com.diegocarloslima.fgelv.lib.WrapperExpandableListAdapter;
 import com.google.gson.Gson;
 import com.yztc.core.base.BaseActivity;
 import com.yztc.core.utils.DensityUtil;
+import com.yztc.core.utils.SPUtils;
+import com.yztc.core.views.SideBar;
+import com.yztc.core.views.flowlayout.FlowLayout;
+import com.yztc.core.views.flowlayout.TagAdapter;
+import com.yztc.core.views.flowlayout.TagFlowLayout;
 import com.yztc.damai.R;
+import com.yztc.damai.help.Constant;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
-import com.yztc.damai.view.SideBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,30 +58,89 @@ public class ChoiceCityActivity extends BaseActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setTitle("选择城市");
 
+        initList();
+
+        //设置右侧触摸监听
+        initRightBar();
+
+
+        loadCityData();
+    }
+
+    private void initList() {
         adapter = new CityAdapter(this, data);
 
         cityList.setDividerHeight(1);
+        cityList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return true;
+            }
+        });
+        cityList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                CityBean cityBean = data.get(groupPosition).getSites().get(childPosition);
+                setResultData(cityBean.getI());
+                return false;
+            }
+        });
         cityList.setGroupIndicator(null);
         View header = getLayoutInflater().inflate(R.layout.layout_choicecity_header, null, false);
         cityList.addHeaderView(header);
 
+        initFlowLayout(header);
+
         WrapperExpandableListAdapter wrapperAdapter = new WrapperExpandableListAdapter(adapter);
         cityList.setAdapter(wrapperAdapter);
+    }
 
-        //设置右侧触摸监听
+    private void initFlowLayout(View header) {
+        final TagFlowLayout flowLayout = (TagFlowLayout)
+                header.findViewById(R.id.flowLayout);
+        flowLayout.setMaxSelectCount(-1);
+        flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+
+                setResultData(100);
+
+                return true;
+            }
+        });
+        List<String> citys = new ArrayList<>();
+        citys.add("北京");
+        citys.add("上海");
+        citys.add("广州");
+        citys.add("深圳");
+        citys.add("武汉");
+        citys.add("成都");
+        flowLayout.setAdapter(new TagAdapter<String>(citys) {
+
+            @Override
+            public View getView(FlowLayout parent, int position, String o) {
+                TextView text = (TextView) getLayoutInflater().inflate(R.layout.item_hot_city, null, false);
+                text.setText(o);
+                return text;
+            }
+        });
+    }
+
+    private void initRightBar() {
+        int color = getResources().getColor(R.color.colorPrimaryDark);
+        sideBar.setColor(color);
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
 
             @Override
             public void onTouchingLetterChanged(String s) {
                 for (int i = 0; i < data.size(); i++) {
                     if (data.get(i).getSpellCode().startsWith(s)) {
-                        cityList.setSelectedGroup(i);
+                        cityList.setSelectedGroup(i - 1);
                         break;
                     }
                 }
             }
         });
-        loadCityData();
     }
 
     private void loadCityData() {
@@ -111,6 +176,12 @@ public class ChoiceCityActivity extends BaseActivity {
             }
         });
 
+    }
+
+    public void setResultData(int resultData) {
+        SPUtils.put(this, Constant.SP_CURR_CITY, resultData);
+        setResult(RESULT_OK);
+        finish();
     }
 
 
@@ -192,9 +263,9 @@ public class ChoiceCityActivity extends BaseActivity {
     }
 
 
-    public static void startForResult(Fragment context, int resquest) {
+    public static void start(Context context) {
         Intent i = new Intent();
-        i.setClass(context.getContext(), ChoiceCityActivity.class);
-        context.startActivityForResult(i, resquest);
+        i.setClass(context, ChoiceCityActivity.class);
+        context.startActivity(i);
     }
 }

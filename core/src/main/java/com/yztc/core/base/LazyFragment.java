@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 //懒加载
 public abstract class LazyFragment extends BaseFragment {
 
-    private boolean isCreated; //是否创建
-    private boolean isInited;  //是否初始化过
-    private boolean needInit;  //是否需要初始化
+    protected boolean isCreated; //是否创建
+    protected boolean isInited;  //是否初始化过
+    protected boolean needInit;  //是否需要初始化
 
     protected View root;
 

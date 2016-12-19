@@ -1,15 +1,16 @@
-package com.yztc.damai.view;
+package com.yztc.core.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import com.yztc.core.utils.DensityUtil;
 
 public class SideBar extends View {
     // 触摸事件
@@ -18,11 +19,17 @@ public class SideBar extends View {
     private String[] b;
     private int choose = -1;// 选中
     private Paint paint = new Paint();
+    private int color;
 
     private TextView mTextDialog;
 
     public void setData(String[] b) {
         this.b = b;
+        invalidate();
+    }
+
+    public void setColor(int c) {
+        this.color = c;
         invalidate();
     }
 
@@ -63,11 +70,11 @@ public class SideBar extends View {
         int singleHeight = height / b.length;// 获取每一个字母的高度
 
         for (int i = 0; i < b.length; i++) {
-            paint.setColor(Color.rgb(33, 65, 98));
+            paint.setColor(color);
             // paint.setColor(Color.WHITE);
             paint.setTypeface(Typeface.DEFAULT_BOLD);
             paint.setAntiAlias(true);
-            paint.setTextSize(20);
+            paint.setTextSize(DensityUtil.dip2px(getContext(), 10));
             // 选中的状态
             if (i == choose) {
                 paint.setColor(Color.parseColor("#3399ff"));
@@ -92,7 +99,7 @@ public class SideBar extends View {
 
         switch (action) {
             case MotionEvent.ACTION_UP:
-                setBackgroundDrawable(new ColorDrawable(0x00000000));
+                setBackgroundColor(Color.TRANSPARENT);
                 choose = -1;//
                 invalidate();
                 if (mTextDialog != null) {
@@ -101,7 +108,7 @@ public class SideBar extends View {
                 break;
 
             default:
-                setBackgroundColor(Color.GRAY);
+                setBackgroundColor(Color.TRANSPARENT);
                 if (oldChoose != c) {
                     if (c >= 0 && c < b.length) {
                         if (listener != null) {

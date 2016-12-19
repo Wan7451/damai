@@ -12,7 +12,7 @@
         android:layout_height="match_parent" />
 
 
-    <com.yztc.damai.view.SideBar
+    <com.yztc.core.views.SideBar
         android:id="@+id/sideBar"
         android:layout_width="20dp"
         android:layout_alignParentRight="true"

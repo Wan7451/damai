@@ -1,10 +1,13 @@
 package com.yztc.damai.ui.cls;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.ViewTreeObserver;
@@ -13,9 +16,12 @@ import com.google.gson.Gson;
 import com.yztc.core.base.LazyFragment;
 import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.R;
+import com.yztc.damai.help.Event;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -244,5 +250,26 @@ public class ClassItemFragment extends LazyFragment {
         args.putInt("type", i);
         f.setArguments(args);
         return f;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onChange(Event event) {
+        switch (event.getType()) {
+            case Event.EVENT_CITY_CHANGE:
+                isInited = false;
+                break;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

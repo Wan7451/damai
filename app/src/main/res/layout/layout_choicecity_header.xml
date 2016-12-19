@@ -31,12 +31,23 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="热门城市" />
+        android:text="热门城市"
+        android:padding="16dp" />
+
+    <com.yztc.core.views.flowlayout.TagFlowLayout
+        android:id="@+id/flowLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.yztc.core.views.DivierView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="全部城市" />
+        android:text="全部城市"
+        android:padding="16dp" />
 
 
 </LinearLayout>
