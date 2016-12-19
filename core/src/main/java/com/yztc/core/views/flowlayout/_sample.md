@@ -17,13 +17,13 @@ Android流式布局，支持单选、多选等，适合用于产品标签等。
 布局文件中声明：
 
 ```
- <com.zhy.view.flowlayout.TagFlowLayout
+ <com.yztc.core.views.flowlayout.TagFlowLayout
         android:id="@+id/id_flowlayout"
-        zhy:max_select="-1"
+        app:max_select="-1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="20dp">
-    </com.zhy.view.flowlayout.TagFlowLayout>
+    </com.yztc.core.views.flowlayout.TagFlowLayout>
 ```
 
 支持属性：
