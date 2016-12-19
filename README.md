@@ -1,8 +1,11 @@
-大麦网Demo
+# 大麦网Demo
+通过Demo总结下最近使用的技术
+
 
     使用原生手写
 
     1. 封装网络框架 HttpURLConnection
+       RxJava+Retrofit+Okhttp
        动态缓存JSON数据 30分种，超时重新加载
     2. 自定义图片加载工具
        使用三级缓存+队列 下载、展示
@@ -18,13 +21,15 @@
     7. 封装多个常用类
     ...
 
+# 技术点一览
+
 * BannerView 的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/views/banner/_sample.md)
 
 * 封装网络框架 的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/net/_sample.md)
 
-* 万能适配器 的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/adapter/_sample.md)
+* 万能适配器(洋神) 的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/adapter/_sample.md)
 
-* 流式布局 的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/views/flowlayout/_sample.md)
+* 流式布局(洋神) 的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/views/flowlayout/_sample.md)
 
 * 懒加载Fragment的[用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/base/LazyFragment.java)
 

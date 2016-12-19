@@ -5,8 +5,6 @@ package com.yztc.damai.net;
  */
 
 public interface NetResponse {
-
      void onResponse(String response);
      void onError(String erroe);
-
 }

@@ -26,7 +26,7 @@ public class DMRetrofitHepler extends RetrofitProvider {
     protected BasicParamsInterceptor addBasicParams() {
         //公共参数
         return new BasicParamsInterceptor.Builder()
-                .addParam("key1", "value1")
+                //.addParam("key1", "value1")
                 .build();
     }
 }
