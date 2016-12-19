@@ -2,7 +2,6 @@ package com.yztc.core.utils;
 
 import android.os.Environment;
 
-
 import com.yztc.core.App;
 
 import java.io.File;
@@ -36,6 +35,14 @@ public class FileUtils {
 
     public static File getUrlCacheFloder(){
         File cache=new File(getCacheFloder(),"urls");
+        if (!cache.exists()) {
+            cache.mkdirs();
+        }
+        return cache;
+    }
+
+    public static File getHttpCacheFile() {
+        File cache = new File(getCacheFloder(), "http");
         if(!cache.exists()){
             cache.mkdirs();
         }

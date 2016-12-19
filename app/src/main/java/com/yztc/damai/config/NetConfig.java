@@ -1,4 +1,4 @@
-package com.yztc.damai.net;
+package com.yztc.damai.config;
 
 /**
  * Created by wanggang on 2016/12/12.

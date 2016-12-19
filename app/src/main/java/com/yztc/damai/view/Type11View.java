@@ -14,7 +14,7 @@ import com.yztc.core.image.ImageLoader;
 import com.yztc.core.utils.DensityUtil;
 import com.yztc.core.views.NoScrollListView;
 import com.yztc.damai.R;
-import com.yztc.damai.net.NetConfig;
+import com.yztc.damai.config.NetConfig;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 import com.yztc.damai.ui.recommend.GuessLikeBean;

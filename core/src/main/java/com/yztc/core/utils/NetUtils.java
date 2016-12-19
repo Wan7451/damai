@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.yztc.core.App;
+
 /**
  * Created by wanggang on 2016/12/18.
  */
@@ -34,6 +36,16 @@ public class NetUtils {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 判断网络是否连接
+     *
+     * @return
+     */
+    public static boolean isConnected() {
+        return isConnected(App.getContext());
     }
 
     /**

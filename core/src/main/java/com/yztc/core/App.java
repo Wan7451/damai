@@ -3,7 +3,7 @@ package com.yztc.core;
 import android.app.Application;
 
 import com.yztc.core.image.ImageLoader;
-import com.yztc.core.net.NetDataCache;
+import com.yztc.core.utils.LimitDataCache;
 
 /**
  * Created by wanggang on 2016/12/12.
@@ -30,6 +30,6 @@ public class App extends Application {
     //结束
     public void onDestory(){
         ImageLoader.getInstance().onDestroy();
-        NetDataCache.getInstance().onDestroy();
+        LimitDataCache.getInstance().onDestroy();
     }
 }

@@ -20,7 +20,7 @@ import com.yztc.core.utils.ToastUtils;
 import com.yztc.core.views.banner.BannerView;
 import com.yztc.core.views.banner.BannerViewPager;
 import com.yztc.damai.R;
-import com.yztc.damai.net.NetConfig;
+import com.yztc.damai.config.NetConfig;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 import com.yztc.damai.ui.others.ChoiceCityActivity;

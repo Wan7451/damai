@@ -1,12 +1,6 @@
-package com.yztc.core.net;
+package com.yztc.core.utils;
 
 import android.util.Log;
-
-
-import com.yztc.core.utils.AppUtils;
-import com.yztc.core.utils.DiskLruCache;
-import com.yztc.core.utils.FileUtils;
-import com.yztc.core.utils.MD5Utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,12 +16,13 @@ import java.util.Date;
  */
 
 /**
+ * 限时数据缓存
  * 数据缓存
  * 数据缓存时间
  */
-public class NetDataCache {
+public class LimitDataCache {
 
-    private static NetDataCache instance;
+    private static LimitDataCache instance;
 
     private static final int CACHE_SIZE = 10 * 1024 * 1024;
     private static final int CACHE_TIMEOUT = 30 * 60 * 1000;//30分钟
@@ -38,11 +33,11 @@ public class NetDataCache {
     private static final String TAG="==CACHE==>";
 
 
-    public static NetDataCache getInstance() {
+    public static LimitDataCache getInstance() {
         if (instance == null) {
-            synchronized (NetDataCache.class) {
+            synchronized (LimitDataCache.class) {
                 if (instance == null) {
-                    instance = new NetDataCache();
+                    instance = new LimitDataCache();
                 }
             }
         }
@@ -51,7 +46,7 @@ public class NetDataCache {
     }
 
 
-    private NetDataCache() {
+    private LimitDataCache() {
         try {
             mDiskLruCache = DiskLruCache.open(
                     FileUtils.getUrlCacheFloder(),
@@ -104,7 +99,7 @@ public class NetDataCache {
     }
 
 
-    public String getAsString(String key) {
+    public String getString(String key) {
         InputStream inputStream = null;
         try {
             //write READ
