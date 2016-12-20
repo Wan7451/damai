@@ -14,8 +14,10 @@ import android.view.ViewTreeObserver;
 
 import com.google.gson.Gson;
 import com.yztc.core.base.LazyFragment;
+import com.yztc.core.utils.SPUtils;
 import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.R;
+import com.yztc.damai.help.Constant;
 import com.yztc.damai.help.Event;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
@@ -40,6 +42,7 @@ public class ClassItemFragment extends LazyFragment {
     private RecyclerView recyclerView;
     private ViewStub stubView;
     private View emptyView;
+    private String cityName;
 
     public ClassItemFragment() {
     }
@@ -51,6 +54,8 @@ public class ClassItemFragment extends LazyFragment {
     private int type;
     private int page = 1;
 
+    private int cityId;
+
 
     @Override
     protected int getLayoutId() {
@@ -59,6 +64,10 @@ public class ClassItemFragment extends LazyFragment {
 
     @Override
     protected void init(final View v) {
+
+        cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
+
+
 
         type = getArguments().getInt("type");
         switch (type) {
@@ -139,6 +148,12 @@ public class ClassItemFragment extends LazyFragment {
         });
     }
 
+    public void refreshData() {
+        cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
+        refreshLayout.setRefreshing(true);
+        loadData();
+    }
+
     private void addData() {
         HashMap<String, String> params = new HashMap<>();
         params.put("cc", "0");
@@ -147,7 +162,7 @@ public class ClassItemFragment extends LazyFragment {
         params.put("ot", "0");
         params.put("v", "0");
         params.put("p", ++page + "");
-        params.put("cityId", "852");
+        params.put("cityId", cityId + "");
 
         NetUtils.getInstance().get("ProjLst.aspx", params, new NetResponse() {
             @Override
@@ -193,7 +208,7 @@ public class ClassItemFragment extends LazyFragment {
         params.put("ot", "0");
         params.put("v", "0");
         params.put("p", page + "");
-        params.put("cityId", "852");
+        params.put("cityId", cityId + "");
 
         NetUtils.getInstance().get("ProjLst.aspx", params, new NetResponse() {
             @Override
@@ -244,7 +259,7 @@ public class ClassItemFragment extends LazyFragment {
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    public static Fragment newInstance(int i) {
+    public static ClassItemFragment newInstance(int i) {
         ClassItemFragment f = new ClassItemFragment();
         Bundle args = new Bundle();
         args.putInt("type", i);
@@ -263,6 +278,7 @@ public class ClassItemFragment extends LazyFragment {
         switch (event.getType()) {
             case Event.EVENT_CITY_CHANGE:
                 isInited = false;
+                cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
                 break;
         }
     }
@@ -272,4 +288,6 @@ public class ClassItemFragment extends LazyFragment {
         super.onDetach();
         EventBus.getDefault().unregister(this);
     }
+
+
 }

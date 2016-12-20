@@ -7,4 +7,5 @@ package com.yztc.damai.help;
 public class Constant {
 
     public static final String SP_CURR_CITY = "SP_CURR_CITY";
+    public static final String SP_CURR_CITY_N = "SP_CURR_CITY_N";
 }

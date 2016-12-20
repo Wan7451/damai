@@ -23,9 +23,11 @@ import com.yztc.core.views.flowlayout.TagAdapter;
 import com.yztc.core.views.flowlayout.TagFlowLayout;
 import com.yztc.damai.R;
 import com.yztc.damai.help.Constant;
+import com.yztc.damai.help.Event;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,7 +83,7 @@ public class ChoiceCityActivity extends BaseActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 CityBean cityBean = data.get(groupPosition).getSites().get(childPosition);
-                setResultData(cityBean.getI());
+                setResultData(cityBean.getI(), cityBean.getN());
                 return false;
             }
         });
@@ -99,22 +101,34 @@ public class ChoiceCityActivity extends BaseActivity {
         final TagFlowLayout flowLayout = (TagFlowLayout)
                 header.findViewById(R.id.flowLayout);
         flowLayout.setMaxSelectCount(-1);
-        flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-            @Override
-            public boolean onTagClick(View view, int position, FlowLayout parent) {
 
-                setResultData(100);
 
-                return true;
-            }
-        });
-        List<String> citys = new ArrayList<>();
+        final List<Integer> code = new ArrayList<>();
+        code.add(852);
+        code.add(872);
+        code.add(893);
+        code.add(906);
+        code.add(586);
+        code.add(1377);
+        final List<String> citys = new ArrayList<>();
         citys.add("北京");
         citys.add("上海");
         citys.add("广州");
         citys.add("深圳");
         citys.add("武汉");
         citys.add("成都");
+
+        flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+
+                setResultData(code.get(position), citys.get(position));
+
+                return true;
+            }
+        });
+
+
         flowLayout.setAdapter(new TagAdapter<String>(citys) {
 
             @Override
@@ -178,9 +192,11 @@ public class ChoiceCityActivity extends BaseActivity {
 
     }
 
-    public void setResultData(int resultData) {
-        SPUtils.put(this, Constant.SP_CURR_CITY, resultData);
+    public void setResultData(int cityId, String cityName) {
+        SPUtils.put(this, Constant.SP_CURR_CITY, cityId);
+        SPUtils.put(this, Constant.SP_CURR_CITY_N, cityName);
         setResult(RESULT_OK);
+        EventBus.getDefault().post(new Event(Event.EVENT_CITY_CHANGE, null));
         finish();
     }
 

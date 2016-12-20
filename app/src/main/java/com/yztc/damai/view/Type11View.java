@@ -12,9 +12,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.yztc.core.image.ImageLoader;
 import com.yztc.core.utils.DensityUtil;
+import com.yztc.core.utils.SPUtils;
 import com.yztc.core.views.NoScrollListView;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
+import com.yztc.damai.help.Constant;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 import com.yztc.damai.ui.recommend.GuessLikeBean;
@@ -58,8 +60,9 @@ public class Type11View extends TypeContainerView {
         listView.setDividerHeight(DensityUtil.dip2px(getContext(),1));
         addView(listView);
 
+        int cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
         HashMap<String, String> maps = new HashMap<>();
-        maps.put("cityId", "852");
+        maps.put("cityId", cityId + "");
         maps.put("lon", "116.391");
         maps.put("lat", "39.907");
         maps.put("visitorId", "WDBSUDg%2FcM8DADI8fZp%2FGofv");

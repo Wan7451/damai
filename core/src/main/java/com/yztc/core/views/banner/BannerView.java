@@ -150,6 +150,7 @@ public class BannerView extends FrameLayout {
 //        viewPager.setCurrentItem(data.size()*10,false);
 
         //添加指示器
+        indicate.removeAllViews();
         int count = data.size();
         for (int i = 0; i < count; i++) {
             indicate.addView(generateIndicateView(i));

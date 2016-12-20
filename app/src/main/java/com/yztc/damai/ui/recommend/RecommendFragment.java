@@ -3,7 +3,6 @@ package com.yztc.damai.ui.recommend;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -16,11 +15,13 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.yztc.core.utils.DensityUtil;
+import com.yztc.core.utils.SPUtils;
 import com.yztc.core.utils.ToastUtils;
 import com.yztc.core.views.banner.BannerView;
 import com.yztc.core.views.banner.BannerViewPager;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
+import com.yztc.damai.help.Constant;
 import com.yztc.damai.help.Event;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
@@ -32,6 +33,7 @@ import com.yztc.damai.view.Type12View;
 import com.yztc.damai.view.Type1View;
 import com.yztc.damai.view.Type2View;
 import com.yztc.damai.view.Type3View;
+import com.yztc.damai.view.Type4View;
 import com.yztc.damai.view.Type6View;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,6 +72,8 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
     private ViewGroup rootView;
 
     private Gson gson = new Gson();
+    private int cityId;
+    private String cityName;
 
     public RecommendFragment() {
     }
@@ -89,6 +93,12 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         netUtils = NetUtils.getInstance();
+
+        cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
+        cityName = (String) SPUtils.get(getContext(), Constant.SP_CURR_CITY_N, "北京");
+        choiceCity.setText(cityName);
+
+
         initBannerView(view);
         loadBanner();
 
@@ -118,10 +128,13 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
 
     private void loadData() {
         HashMap<String, String> maps = new HashMap<>();
-        maps.put("cityId", "852");
+        maps.put("cityId", cityId + "");
         netUtils.get("Proj/Panev3.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {
+
+                mSwipeRefreshLayout.setRefreshing(false);
+                recommendContainer.removeAllViews();
                 try {
                     JSONObject object = new JSONObject(response);
 
@@ -145,6 +158,11 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
                                 Type3View v3 = new Type3View(getContext());
                                 v3.setData(typeViewBean);
                                 recommendContainer.addView(v3);
+                                break;
+                            case 4:
+                                Type4View v4 = new Type4View(getContext());
+                                v4.setData(typeViewBean);
+                                recommendContainer.addView(v4);
                                 break;
                             case 6:
                                 Type6View v6 = new Type6View(getContext());
@@ -201,7 +219,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
 
     private void loadBanner() {
         HashMap<String, String> maps = new HashMap<>();
-        maps.put("cityId", "852");
+        maps.put("cityId", cityId + "");
 
         netUtils.get(NetConfig.BASE_URL2,
                 "index/banner/13/list.json",
@@ -234,12 +252,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }, 2000);
+        loadBanner();
     }
 
     @OnClick(R.id.choiceCity)
@@ -259,6 +272,11 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
         switch (event.getType()) {
             case Event.EVENT_CITY_CHANGE:
                 //reload();
+                mSwipeRefreshLayout.setRefreshing(true);
+                cityName = (String) SPUtils.get(getContext(), Constant.SP_CURR_CITY_N, "北京");
+                choiceCity.setText(cityName);
+                cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
+                loadBanner();
                 break;
         }
     }

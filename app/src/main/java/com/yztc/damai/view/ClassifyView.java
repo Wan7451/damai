@@ -2,6 +2,7 @@ package com.yztc.damai.view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -24,8 +25,6 @@ import com.yztc.damai.ui.recommend.ClassifyBean;
 import com.yztc.damai.ui.recommend.HeadLineBean;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +36,7 @@ import butterknife.ButterKnife;
 public class ClassifyView extends RelativeLayout {
 
     private static final int AUTO_SCROLL_TIME=3000;
+    private static final int HANDLE_WHAT = 111;
 
     @BindView(R.id.classify_grid)
     RecyclerView classifyGrid;
@@ -44,11 +44,24 @@ public class ClassifyView extends RelativeLayout {
     TextSwitcher classifyHot;
     private ArrayList<ClassifyBean> classifys=new ArrayList<>();
 
+    private ArrayList<HeadLineBean> headLines = new ArrayList<>();
     private ClassifyAdapter adapter;
-    private ArrayList<HeadLineBean> headLines;
 
-    private Timer timer=new Timer();
-    private Handler handler=new Handler();
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                //显示的文字
+                case HANDLE_WHAT:
+                    classifyHot.setText(headLines.get(posotion++ % headLines.size()).getText());
+                    handler.sendEmptyMessageDelayed(HANDLE_WHAT, AUTO_SCROLL_TIME);
+                    break;
+            }
+
+        }
+    };
 
     public ClassifyView(Context context) {
         super(context);
@@ -97,32 +110,18 @@ public class ClassifyView extends RelativeLayout {
 
     private int posotion;
     public void setHeadLines(final ArrayList<HeadLineBean> headLines) {
-        this.headLines = headLines;
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        HeadLineBean bean = headLines.get(posotion++ % headLines.size());
-                        //显示的文字
-                        classifyHot.setText(bean.getText());
-                    }
-                });
-            }
-        },0,AUTO_SCROLL_TIME);
+        this.headLines.clear();
+        this.headLines.addAll(headLines);
+        handler.removeMessages(HANDLE_WHAT);
+        handler.sendEmptyMessage(HANDLE_WHAT);
     }
+
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if(timer!=null){
-            timer.cancel();
-            timer=null;
-        }
+        handler.removeMessages(HANDLE_WHAT);
     }
-
 
     static class ClassifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

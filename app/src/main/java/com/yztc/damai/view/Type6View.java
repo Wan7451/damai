@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.yztc.core.image.ImageLoader;
+import com.yztc.core.utils.SPUtils;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
+import com.yztc.damai.help.Constant;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;
 import com.yztc.damai.ui.recommend.RecommendBean;
@@ -60,7 +62,8 @@ public class Type6View extends TypeContainerView {
         addView(recycler);
 
         HashMap<String,String> maps=new HashMap<>();
-        maps.put("cityId","852");
+        int cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
+        maps.put("cityId", cityId + "");
         NetUtils.getInstance().get("proj/HotProjV1.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {

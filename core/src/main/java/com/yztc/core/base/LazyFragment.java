@@ -60,4 +60,6 @@ public abstract class LazyFragment extends BaseFragment {
     protected abstract void init(View v);
     @LayoutRes
     protected abstract int getLayoutId();
+
+
 }

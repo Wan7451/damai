@@ -8,6 +8,15 @@ public class Event {
 
     public static final int EVENT_CITY_CHANGE = 111;
 
+
+    private Event() {
+    }
+
+    public Event(int type, Object data) {
+        this.type = type;
+        this.data = data;
+    }
+
     private int type;
 
     private Object data;
