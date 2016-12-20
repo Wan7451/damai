@@ -9,6 +9,7 @@
 * 支持显示网络日志
 * 处理自动处理网络问题
 * 显示数据加载对话框
+* BaseResponse 处理
 
 
 
@@ -17,33 +18,25 @@
 Retrofit的自定义
 
 ```
- public class DMRetrofitHepler  extends RetrofitProvider{
-
-     DMRetrofitHepler() {
-         super();
-     }
-
-     @NonNull
-     @Override
-     protected String getBASE_URL() {
-         return NetConfig.BASE_URL;
-     }
-
-     @Override
-     protected BasicParamsInterceptor addBasicParams() {
-         //公共参数
-         return new BasicParamsInterceptor.Builder()
-                 .addParam("key1","value1")
+ BasicParamsInterceptor interceptor=new
+                 BasicParamsInterceptor.Builder()
+                 .addParam("key1","v1")
                  .build();
-     }
- }
+
+ RetrofitProvider hepler = new RetrofitProvider.Builder()
+                 .baseUrl(NetConfig.BASE_URL)
+                 .isGetAutoCache(true)
+                 .isShowLog(true)
+                 .basicParamsInterceptor(interceptor)
+                 .build();
+ retorfit = hepler.getRetorfit();
 ```
 
 
 ### 网络访问封装
 
 ```
-public class HttpRequest extends HttpUtils {
+public class HttpRequest extends HttpBase {
 
     private Retrofit retorfit;
     private DaMaiApi daMaiApi;
@@ -51,7 +44,18 @@ public class HttpRequest extends HttpUtils {
     static HttpRequest instance = null;
 
     private HttpRequest() {
-        DMRetrofitHepler hepler = new DMRetrofitHepler();
+
+        BasicParamsInterceptor interceptor=new
+                BasicParamsInterceptor.Builder()
+                .addParam("key1","v1")
+                .build();
+
+        RetrofitProvider hepler = new RetrofitProvider.Builder()
+                .baseUrl(NetConfig.BASE_URL)
+                .isGetAutoCache(true)
+                .isShowLog(true)
+                .basicParamsInterceptor(interceptor)
+                .build();
         retorfit = hepler.getRetorfit();
     }
 
@@ -74,7 +78,7 @@ public class HttpRequest extends HttpUtils {
     }
 
 
-    public Observable loadData(String userId){
+    public Observable loadData(String userId) {
         return daMaiApi.loadData("userId")
                 .delay(1, TimeUnit.SECONDS)//延迟1S执行网络操作
                 .compose(schedulersTransformer())//线程调度
@@ -107,3 +111,23 @@ public class HttpRequest extends HttpUtils {
 
 ```
 
+# Response 基类处理 （可以不管）
+
+```
+public class Response<T> implements BaseResponse {
+    @Override
+    public boolean isOk() {
+        return false;
+    }
+
+    @Override
+    public T getData() {
+        return null;
+    }
+
+    @Override
+    public String erroeMsg() {
+        return null;
+    }
+}
+```

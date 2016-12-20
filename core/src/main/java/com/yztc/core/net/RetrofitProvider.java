@@ -20,17 +20,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * <p>
  * 初始化 Retrofit  Okhttp
  */
-public abstract class RetrofitProvider {
+public class RetrofitProvider {
 
 
     public static final String TAG = "======";
 
     protected static Retrofit retrofit;
 
-    protected RetrofitProvider() {
+    private RetrofitProvider() {
+    }
+
+    private RetrofitProvider(Builder builder) {
+        if (retrofit != null)
+            return;
         retrofit = new Retrofit.Builder()
-                .baseUrl(getBASE_URL())
-                .client(client())
+                .baseUrl(builder.baseUrl)
+                .client(client(builder))
                 //.serializeNulls  解决 gson  null值不进行转换问题
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -43,19 +48,19 @@ public abstract class RetrofitProvider {
     }
 
 
-    private OkHttpClient client() {
+    private OkHttpClient client(Builder options) {
         //缓存路径
         File file = FileUtils.getHttpCacheFile();
         Cache cache = new Cache(file, 20 * 1024 * 1024);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        if (isAutoCache()) {
+        if (options.isGetAutoCache) {
             //本地缓存拦截器
             builder.addInterceptor(new RewriteCacheControlInterceptor());
             builder.addNetworkInterceptor(new RewriteCacheControlInterceptor());
         }
-        if (isShowLog()) {
+        if (options.isShowLog) {
             //打印网络日志
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
@@ -69,13 +74,12 @@ public abstract class RetrofitProvider {
         }
 
         //公共参数
-        BasicParamsInterceptor basicParamsInterceptor = addBasicParams();
-        if (null != basicParamsInterceptor) {
-            builder.addNetworkInterceptor(basicParamsInterceptor);
+
+        if (null != options.interceptor) {
+            builder.addNetworkInterceptor(options.interceptor);
         }
 
-
-        OkHttpClient client = builder(builder)
+        OkHttpClient client = builder
                 //SSLSocket
 //                .sslSocketFactory(
 //                        SSLHelper.getSSLSocketFactory(App.getContext()),
@@ -94,48 +98,39 @@ public abstract class RetrofitProvider {
         return client;
     }
 
-    /**
-     * Base URL
-     *
-     * @return
-     */
-    @NonNull
-    protected abstract String getBASE_URL();
 
-    /**
-     * 公共参数
-     *
-     * @return
-     */
-    protected abstract BasicParamsInterceptor addBasicParams();
+    public static class Builder {
+        private boolean isGetAutoCache = true;
+        private boolean isShowLog = true;
+        private String baseUrl;
+        private BasicParamsInterceptor interceptor;
 
-    /**
-     * 其他配置
-     *
-     * @param builder
-     * @return
-     */
-    @NonNull
-    protected OkHttpClient.Builder builder(OkHttpClient.Builder builder) {
-        return builder;
+        public Builder isGetAutoCache(boolean isGetAutoCache) {
+            this.isGetAutoCache = isGetAutoCache;
+            return this;
+        }
+
+        public Builder isShowLog(boolean isShowLog) {
+            this.isShowLog = isShowLog;
+            return this;
+        }
+
+        public Builder basicParamsInterceptor(BasicParamsInterceptor interceptor) {
+            this.interceptor = interceptor;
+            return this;
+        }
+
+        public Builder baseUrl(@NonNull String baseUrl) {
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
+        public RetrofitProvider build() {
+            RetrofitProvider retrofit = new RetrofitProvider(this);
+            return retrofit;
+        }
+
     }
 
-    /**
-     * 自动缓存
-     *
-     * @return
-     */
-    protected boolean isAutoCache() {
-        return true;
-    }
-
-    /**
-     * 是否显示日志
-     *
-     * @return
-     */
-    protected boolean isShowLog() {
-        return true;
-    }
 
 }

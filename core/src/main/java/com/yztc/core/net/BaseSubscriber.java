@@ -42,6 +42,7 @@ public abstract class BaseSubscriber<T> extends Subscriber<T> {
                     new ExceptionHandle.ResponeThrowable(
                             new Throwable("网络没有连接,请打开网路"),
                             ExceptionHandle.ERROR.NETWORD_ERROR));
+
         } else {
             //网络操作，显示对话框
             DialogHelper.showProgressDlg(context, "网络加载中....");

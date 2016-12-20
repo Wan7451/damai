@@ -52,8 +52,7 @@ public class HttpBase {
         public T call(BaseResponse<T> response) {
             //当前业务操作是否成功
             if (!response.isOk())
-                throw new RuntimeException(response.getStatus() + "\n" +
-                        (response.getMsg() != null ? response.getMsg() : ""));
+                throw new RuntimeException(response.erroeMsg());
             return response.getData();
         }
     }
