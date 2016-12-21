@@ -1,8 +1,10 @@
 package com.yztc.core.utils;
 
 
+import android.widget.Toast;
+
 import com.yztc.core.App;
-import com.yztc.core.views.Toast;
+import com.yztc.core.views.toastcompat.ToastCompat;
 
 
 /**
@@ -18,13 +20,13 @@ public class ToastUtils {
 
 
     public static void show(String text){
-        Toast.init(App.getContext());
-        Toast.show(text);
+        ToastCompat.makeText(App.getContext(), text,
+                Toast.LENGTH_SHORT).show();
     }
 
     public static void showLong(String text){
-        Toast.init(App.getContext());
-        Toast.show(text, Toast.LENGTH_LONG);
+        ToastCompat.makeText(App.getContext(), text,
+                Toast.LENGTH_LONG).show();
     }
 
     private ToastUtils(){}
