@@ -1,8 +1,8 @@
 package com.yztc.core.utils;
 
-import android.widget.Toast;
 
 import com.yztc.core.App;
+import com.yztc.core.views.Toast;
 
 
 /**
@@ -15,32 +15,18 @@ import com.yztc.core.App;
 public class ToastUtils {
 
 
-    private static  Toast toast=null;
 
 
     public static void show(String text){
-        init();
-        toast.setText(text);
-        toast.show();
+        Toast.init(App.getContext());
+        Toast.show(text);
     }
 
     public static void showLong(String text){
-        init();
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setText(text);
-        toast.show();
+        Toast.init(App.getContext());
+        Toast.show(text, Toast.LENGTH_LONG);
     }
 
     private ToastUtils(){}
 
-    private static Toast init(){
-        if(toast==null){
-            synchronized (ToastUtils.class){
-                if(toast==null){
-                    toast=Toast.makeText(App.getContext(),"",Toast.LENGTH_SHORT);
-                }
-            }
-        }
-        return toast;
-    }
 }

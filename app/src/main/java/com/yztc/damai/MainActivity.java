@@ -1,7 +1,6 @@
 package com.yztc.damai;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
          fragmentMgr = getSupportFragmentManager();
 
-
+        mainIndicate.setOnNavigationItemSelectedListener(new SelectedListener());
 
         if (savedInstanceState != null) {
             //读取上一次界面Save的时候tab选中的状态
@@ -53,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
             discover = fragmentMgr.findFragmentByTag(tags[2]);
             mine = fragmentMgr.findFragmentByTag(tags[3]);
             restoreSelect();
+        } else {
+            mainIndicate.findViewById(R.id.menu_recommend).performClick();
         }
-        mainIndicate.setOnNavigationItemSelectedListener(new SelectedListener());
-        mainIndicate.findViewById(R.id.menu_recommend).performClick();
     }
 
 
@@ -163,10 +162,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putInt(SELINDEX,selindex);
     }
+
 
     long curr;
 

@@ -38,3 +38,6 @@
 * 封装的多个工具类 [用法](https://github.com/Wan7451/damai/tree/master/core/src/main/java/com/yztc/core/utils)
 
 * 限时本地缓存数据 [用法](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/utils/LimitDataCache.java)
+
+* 自定Toast，解决 用户屏蔽App的通知权限后，Toast 不显示的问题
+                [查看]()

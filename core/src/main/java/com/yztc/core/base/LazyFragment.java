@@ -26,6 +26,7 @@ public abstract class LazyFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
         if(isVisibleToUser && !isInited){
             if(isCreated){
                 init();
