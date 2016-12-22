@@ -1,8 +1,10 @@
-package com.yztc.core.utils;
+package com.yztc.core.manager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+
+import com.yztc.core.utils.SPUtils;
 
 /**
  * Created by wanggang on 2016/12/22.
@@ -10,7 +12,7 @@ import android.text.TextUtils;
  * 用于管理欢迎页面的图片
  */
 
-public class WelcomePicManager {
+public class NewVersionManager {
 
     public static final String SP_WELCOME = "welcome_pic";
 

@@ -12,9 +12,9 @@ import android.support.multidex.MultiDex;
 
 import com.yztc.core.base.LoadResActivity;
 import com.yztc.core.image.ImageLoader;
+import com.yztc.core.manager.DownLoadFileManager;
+import com.yztc.core.manager.LimitCacheManager;
 import com.yztc.core.utils.AppUtils;
-import com.yztc.core.utils.DownLoadFileManager;
-import com.yztc.core.utils.LimitDataCache;
 import com.yztc.core.utils.LogUtils;
 
 import java.util.Map;
@@ -52,7 +52,7 @@ public class App extends Application {
     //结束
     public void onDestory(){
         ImageLoader.getInstance().onDestroy();
-        LimitDataCache.getInstance().onDestroy();
+        LimitCacheManager.getInstance().onDestroy();
         DownLoadFileManager.getInstance().onDestroy();
     }
 

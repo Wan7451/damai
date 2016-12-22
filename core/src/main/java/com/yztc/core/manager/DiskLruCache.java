@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yztc.core.utils;
+package com.yztc.core.manager;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;

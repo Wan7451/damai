@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.yztc.core.utils.LimitDataCache;
+import com.yztc.core.manager.LimitCacheManager;
 import com.yztc.damai.config.NetConfig;
 
 import java.io.BufferedReader;
@@ -103,7 +103,7 @@ public class NetUtils {
 
                 //从本地缓存取数据
                 //30分钟   缓存超时   返回空
-                String cache = LimitDataCache.getInstance().getString(urlPath);
+                String cache = LimitCacheManager.getInstance().getString(urlPath);
 
                 if (!TextUtils.isEmpty(cache)) {
                     if (DEBUG) {
@@ -144,7 +144,7 @@ public class NetUtils {
                             result.append(temp);
                         }
                         //缓存JSO
-                        LimitDataCache.getInstance().put(urlPath, result.toString());
+                        LimitCacheManager.getInstance().put(urlPath, result.toString());
                         handleSuccess(response, result.toString(), handler);
                     } else if (code > 500) {
                         handleError(response, "后台服务异常", handler);

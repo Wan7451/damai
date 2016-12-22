@@ -1,7 +1,12 @@
-package com.yztc.core.utils;
+package com.yztc.core.manager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.yztc.core.utils.AppUtils;
+import com.yztc.core.utils.FileUtils;
+import com.yztc.core.utils.LogUtils;
+import com.yztc.core.utils.MD5Utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

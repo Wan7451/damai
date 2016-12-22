@@ -11,7 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.tbruyelle.rxpermissions.RxPermissions;
-import com.yztc.core.utils.WelcomePicManager;
+import com.yztc.core.manager.WelcomePicManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +46,8 @@ public class SpalshActivity extends AppCompatActivity {
             protected void onPostExecute(Bitmap bitmap) {
                 if (bitmap != null) {
                     pic.setImageBitmap(bitmap);
+                } else {
+                    pic.setImageResource(R.mipmap.ic_launcher);
                 }
             }
         };

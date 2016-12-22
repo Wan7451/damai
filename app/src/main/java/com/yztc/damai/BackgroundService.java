@@ -7,8 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.yztc.core.manager.WelcomePicManager;
 import com.yztc.core.utils.SPUtils;
-import com.yztc.core.utils.WelcomePicManager;
 import com.yztc.damai.help.Constant;
 import com.yztc.damai.net.NetResponse;
 import com.yztc.damai.net.NetUtils;

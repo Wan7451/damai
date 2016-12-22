@@ -1,6 +1,10 @@
-package com.yztc.core.utils;
+package com.yztc.core.manager;
 
 import android.util.Log;
+
+import com.yztc.core.utils.AppUtils;
+import com.yztc.core.utils.FileUtils;
+import com.yztc.core.utils.MD5Utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,9 +24,9 @@ import java.util.Date;
  * 数据缓存
  * 数据缓存时间
  */
-public class LimitDataCache {
+public class LimitCacheManager {
 
-    private static LimitDataCache instance;
+    private static LimitCacheManager instance;
 
     private static final int CACHE_SIZE = 10 * 1024 * 1024;
     private static final int CACHE_TIMEOUT = 30 * 60 * 1000;//30分钟
@@ -33,11 +37,11 @@ public class LimitDataCache {
     private static final String TAG="==CACHE==>";
 
 
-    public static LimitDataCache getInstance() {
+    public static LimitCacheManager getInstance() {
         if (instance == null) {
-            synchronized (LimitDataCache.class) {
+            synchronized (LimitCacheManager.class) {
                 if (instance == null) {
-                    instance = new LimitDataCache();
+                    instance = new LimitCacheManager();
                 }
             }
         }
@@ -46,7 +50,7 @@ public class LimitDataCache {
     }
 
 
-    private LimitDataCache() {
+    private LimitCacheManager() {
         try {
             mDiskLruCache = DiskLruCache.open(
                     FileUtils.getUrlCacheFloder(),

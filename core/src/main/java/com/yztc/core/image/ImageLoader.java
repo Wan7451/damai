@@ -8,9 +8,8 @@ import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 
-
+import com.yztc.core.manager.DiskLruCache;
 import com.yztc.core.utils.AppUtils;
-import com.yztc.core.utils.DiskLruCache;
 import com.yztc.core.utils.FileUtils;
 import com.yztc.core.utils.MD5Utils;
 
@@ -94,7 +93,7 @@ public class ImageLoader {
         if (loadingQueue.size() < MAX_THREAD_NUM) {
             //添加到下载队列
             loadingQueue.add(task);
-            task.executeOnExecutor(executorService);;
+            task.executeOnExecutor(executorService);
         } else {
             //添加到等待队列
             if (priority)
@@ -173,11 +172,7 @@ public class ImageLoader {
             @Override
             protected boolean removeEldestEntry(Entry eldest) {
                 //限制 链表的长度
-                if (size() > SOFT_CACHE_SIZE) {
-                    //在添加新 item时，移除最不常用的 item
-                    return true;
-                }
-                return false;
+                return size() > SOFT_CACHE_SIZE;
             }
         };
     }
