@@ -1,6 +1,7 @@
 package com.yztc.damai;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().hide();
 
-         fragmentMgr = getSupportFragmentManager();
+        fragmentMgr = getSupportFragmentManager();
 
         mainIndicate.setOnNavigationItemSelectedListener(new SelectedListener());
 
@@ -54,7 +55,18 @@ public class MainActivity extends AppCompatActivity {
             restoreSelect();
         } else {
             mainIndicate.findViewById(R.id.menu_recommend).performClick();
+
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    BackgroundService.start(MainActivity.this);
+                }
+            }, 5 * 1000);
+
         }
+
+
     }
 
 

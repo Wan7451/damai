@@ -1,6 +1,7 @@
 package com.yztc.damai.net;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,18 +35,18 @@ public class NetUtils {
 
     private static final String TAG = "==NET=>";
 
-    private static final boolean DEBUG = true;
+    public static final boolean DEBUG = true;
 
     private static NetUtils instance = null;
 
     private ExecutorService threadPool;
-    private Handler handler;
+    private Handler mHandler;
 
     private NetUtils() {
         //线程池
         threadPool =
                 Executors.newFixedThreadPool(THREAD_NUM);
-        handler = new Handler();
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     public static NetUtils getInstance() {
@@ -61,10 +62,33 @@ public class NetUtils {
     }
 
 
+    public void get(String path,
+                    HashMap<String, String> maps,
+                    NetResponse response) {
+        get(NetConfig.BASE_URL, path, maps, response);
+    }
+
+    public void get(String path,
+                    HashMap<String, String> maps,
+                    NetResponse response,
+                    Handler handler) {
+        get(NetConfig.BASE_URL, path, maps, response, handler);
+    }
+
+
+    public void get(String baseUrl,
+                    String path,
+                    HashMap<String, String> maps,
+                    NetResponse response) {
+        get(baseUrl, path, maps, response, mHandler);
+    }
+
+
     public void get(final String baseUrl,
                     final String path,
                     final HashMap<String, String> maps,
-                    final NetResponse response) {
+                    final NetResponse response,
+                    final Handler handler) {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -85,12 +109,12 @@ public class NetUtils {
                     if (DEBUG) {
                         Log.i(TAG, "state: from Cache");
                     }
-                    handleSuccess(response, cache);
+                    handleSuccess(response, cache, handler);
                     return;
                 }
 
                 if (!NetStatusUtils.isConnect()) {
-                    handleError(response, "网络没有连接");
+                    handleError(response, "网络没有连接", handler);
                     return;
                 }
 
@@ -121,18 +145,18 @@ public class NetUtils {
                         }
                         //缓存JSO
                         LimitDataCache.getInstance().put(urlPath, result.toString());
-                        handleSuccess(response, result.toString());
+                        handleSuccess(response, result.toString(), handler);
                     } else if (code > 500) {
-                        handleError(response, "后台服务异常");
+                        handleError(response, "后台服务异常", handler);
                     } else if (code > 400) {
-                        handleError(response, "网络连接异常");
+                        handleError(response, "网络连接异常", handler);
                     } else {
-                        handleError(response, "未知异常");
+                        handleError(response, "未知异常", handler);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     if (response != null) {
-                        handleError(response, e.getMessage());
+                        handleError(response, e.getMessage(), handler);
                     }
                 } finally {
                     if (stream != null) {
@@ -151,19 +175,7 @@ public class NetUtils {
     }
 
 
-    public void get(String path,
-                    HashMap<String, String> maps,
-                    NetResponse response) {
-        get(NetConfig.BASE_URL, path, maps, response);
-    }
-
-
-    public void post(String path, HashMap<String, String> maps) {
-
-    }
-
-
-    private void handleError(final NetResponse response, final String error) {
+    private void handleError(final NetResponse response, final String error, Handler handler) {
         if (DEBUG && !TextUtils.isEmpty(error))
             Log.i(TAG, error);
 
@@ -178,7 +190,7 @@ public class NetUtils {
         });
     }
 
-    private void handleSuccess(final NetResponse response, final String result) {
+    private void handleSuccess(final NetResponse response, final String result, Handler handler) {
         if (DEBUG)
             logResponse(result);
 

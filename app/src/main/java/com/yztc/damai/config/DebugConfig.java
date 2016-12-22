@@ -7,4 +7,6 @@ package com.yztc.damai.config;
  */
 
 public class DebugConfig {
+
+
 }

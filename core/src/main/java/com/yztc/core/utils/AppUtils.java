@@ -1,5 +1,6 @@
 package com.yztc.core.utils;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
@@ -39,5 +40,15 @@ public class AppUtils {
         return null;
     }
 
+
+    public static PackageInfo getPackageInfo(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            return pm.getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            LogUtils.e(e.getLocalizedMessage());
+        }
+        return new PackageInfo();
+    }
 
 }

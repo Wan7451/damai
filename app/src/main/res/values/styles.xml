@@ -10,4 +10,9 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
+    <style name="Splash" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/colorPrimary</item>
+    </style>
+
 </resources>

@@ -41,6 +41,15 @@ public class FileUtils {
         return cache;
     }
 
+
+    public static File getFileCacheFloder() {
+        File cache = new File(getCacheFloder(), "file");
+        if (!cache.exists()) {
+            cache.mkdirs();
+        }
+        return cache;
+    }
+
     public static File getHttpCacheFile() {
         File cache = new File(getCacheFloder(), "http");
         if(!cache.exists()){
