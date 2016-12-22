@@ -25,7 +25,9 @@
             android:launchMode="singleTask"
             android:process=":mini"
             android:screenOrientation="portrait" />
-        <activity android:name=".SpalshActivity">
+        <activity
+            android:name=".SpalshActivity"
+            android:theme="@style/Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

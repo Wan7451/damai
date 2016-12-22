@@ -12,7 +12,7 @@
 
     <style name="Splash" parent="AppTheme">
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
 </resources>
