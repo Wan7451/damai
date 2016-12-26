@@ -21,22 +21,24 @@ public class WelcomePicManager {
         if (TextUtils.isEmpty(url)) {
             return;
         }
+        DownLoadFileManager mgr = DownLoadFileManager.getInstance();
+
         //文件存在，不下载
-        if (DownLoadFileManager.getInstance().isHasFile(url)) {
+        if (mgr.isHasFile(url)) {
             return;
         }
         //之前的图片
         String lastUrl = (String) SPUtils.get(context, SP_WELCOME, "");
         //判断是否一致，不同的话，删除之前的图片
         if (!TextUtils.isEmpty(lastUrl) && !TextUtils.equals(lastUrl, url)) {
-            if (DownLoadFileManager.getInstance().isHasFile(lastUrl)) {
-                DownLoadFileManager.getInstance().remove(lastUrl);
+            if (mgr.isHasFile(lastUrl)) {
+                mgr.remove(lastUrl);
             }
         }
         //记录图片的名字
         SPUtils.put(context, SP_WELCOME, url);
         //进行下载
-        DownLoadFileManager.getInstance().downLoad(url);
+        mgr.downLoadFile(url);
     }
 
     public static Bitmap getPic(Context context) {

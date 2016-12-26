@@ -166,12 +166,25 @@ public class DownLoadFileManager {
         }
     }
 
+
+    public void downLoadFile(final String urlPath) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                downLoad(urlPath);
+            }
+        }.start();
+
+    }
+
     /**
      * 下载文件
      *
      * @param urlPath
      */
-    public void downLoad(String urlPath) {
+    private void downLoad(String urlPath) {
+
         InputStream stream = null;
         HttpURLConnection conn = null;
         try {
