@@ -49,7 +49,8 @@ public class BackgroundService extends Service {
     private void dowmWelcomePic() {
         HashMap<String, String> maps = new HashMap<>();
         maps.put("type", "720_1280");
-        maps.put("cityid", SPUtils.get(this, Constant.SP_CURR_CITY, "852") + "");
+        int cityId = (int) SPUtils.get(this, Constant.SP_CURR_CITY, 852);
+        maps.put("cityid", cityId + "");
         maps.put("version", "50609");
         NetUtils.getInstance().get(
                 "Other/WelcomePagePicv1.aspx",
