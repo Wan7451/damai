@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
 import com.yztc.core.base.LoadResActivity;
 import com.yztc.core.image.ImageLoader;
@@ -84,6 +85,9 @@ public class App extends Application {
     //neead wait for dexopt ?
     private boolean needWait(Context context) {
         String flag = get2thDexSHA1(context);
+        if (TextUtils.isEmpty(flag)) {
+            return false;
+        }
         LogUtils.d("loadDex", "dex2-sha1 " + flag);
         SharedPreferences sp = context.getSharedPreferences(
                 AppUtils.getPackageInfo(context).versionName, MODE_MULTI_PROCESS);
