@@ -255,8 +255,13 @@ public class NetUtils {
                 }
             }
         } else {
-            Log.i(TAG, response.toString());
+            Log.i(TAG, response);
         }
+    }
+
+    public void destory() {
+        threadPool.shutdown();
+        threadPool = null;
     }
 
 }

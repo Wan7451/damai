@@ -116,7 +116,7 @@ public class App extends Application {
     public void installFinish(Context context) {
         SharedPreferences sp = context.getSharedPreferences(
                 AppUtils.getPackageInfo(context).versionName, MODE_MULTI_PROCESS);
-        sp.edit().putString(KEY_DEX2_SHA1, get2thDexSHA1(context)).commit();
+        sp.edit().putString(KEY_DEX2_SHA1, get2thDexSHA1(context)).apply();
     }
 
     public static String getCurProcessName(Context context) {

@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 view = mainIndicate.findViewById(R.id.menu_mine);
                 break;
+            default:
+                break;
         }
         view.performClick();
     }

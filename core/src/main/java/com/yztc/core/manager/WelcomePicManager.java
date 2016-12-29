@@ -16,8 +16,8 @@ public class WelcomePicManager {
 
     public static final String SP_WELCOME = "welcome_pic";
 
+    public static void savePic(final Context context, final String url) {
 
-    public static void savePic(Context context, String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -35,10 +35,20 @@ public class WelcomePicManager {
                 mgr.remove(lastUrl);
             }
         }
-        //记录图片的名字
-        SPUtils.put(context, SP_WELCOME, url);
+
         //进行下载
-        mgr.downLoadFile(url);
+        mgr.downLoadFile(url, new DownLoadFileManager.OnDownListener() {
+            @Override
+            public void onOk() {
+                //记录图片的名字
+                SPUtils.put(context, SP_WELCOME, url);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     public static Bitmap getPic(Context context) {

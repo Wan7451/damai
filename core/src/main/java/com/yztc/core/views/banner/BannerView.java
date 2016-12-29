@@ -65,6 +65,7 @@ public class BannerView extends FrameLayout {
         //View v= inflater.inflate(R.layout.view_banner,null);
 
         //直接将v  add到Parent中    自定义Vew
+        //返回 parent
         //inflater.inflate(R.layout.view_banner,parent,true);
 
         handler = new H();

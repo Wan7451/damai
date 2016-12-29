@@ -43,7 +43,7 @@ public class BackgroundService extends Service {
         //获得图片下载地址
         dowmWelcomePic();
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY_COMPATIBILITY;
     }
 
     private void dowmWelcomePic() {
@@ -87,5 +87,11 @@ public class BackgroundService extends Service {
         Intent i = new Intent();
         i.setClass(context, BackgroundService.class);
         context.startService(i);
+    }
+
+    public static void stop(Context context) {
+        Intent i = new Intent();
+        i.setClass(context, BackgroundService.class);
+        context.stopService(i);
     }
 }

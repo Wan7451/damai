@@ -10,6 +10,7 @@ import com.yztc.core.utils.MD5Utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -122,6 +123,10 @@ public class DownLoadFileManager {
         return snapshot != null;
     }
 
+    public File getFile(String key) {
+        return new File(FileUtils.getFileCacheFloder(), getKey(key));
+    }
+
 
     /**
      * 获取缓存的图片
@@ -167,15 +172,14 @@ public class DownLoadFileManager {
     }
 
 
-    public void downLoadFile(final String urlPath) {
+    public void downLoadFile(final String urlPath, final OnDownListener l) {
         new Thread() {
             @Override
             public void run() {
                 super.run();
-                downLoad(urlPath);
+                downLoad(urlPath, l);
             }
         }.start();
-
     }
 
     /**
@@ -183,7 +187,7 @@ public class DownLoadFileManager {
      *
      * @param urlPath
      */
-    private void downLoad(String urlPath) {
+    private void downLoad(String urlPath, OnDownListener l) {
 
         InputStream stream = null;
         HttpURLConnection conn = null;
@@ -197,11 +201,21 @@ public class DownLoadFileManager {
                 stream = conn.getInputStream();
                 //缓存
                 if (put(urlPath, stream)) {
+                    if (l != null) {
+                        l.onOk();
+                    }
                     LogUtils.i(TAG, "下载完成");
+                } else {
+                    if (l != null) {
+                        l.onError();
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            if (l != null) {
+                l.onError();
+            }
         } finally {
             if (stream != null) {
                 try {
@@ -243,5 +257,12 @@ public class DownLoadFileManager {
             mDiskLruCache = null;
         } catch (IOException e) {
         }
+    }
+
+
+    public interface OnDownListener {
+        void onOk();
+
+        void onError();
     }
 }
