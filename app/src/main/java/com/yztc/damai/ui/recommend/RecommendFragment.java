@@ -87,12 +87,11 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
         return rootView;
     }
 
-    private NetUtils netUtils;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        netUtils = NetUtils.getInstance();
+
 
         cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
         cityName = (String) SPUtils.get(getContext(), Constant.SP_CURR_CITY_N, "北京");
@@ -129,7 +128,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
     private void loadData() {
         HashMap<String, String> maps = new HashMap<>();
         maps.put("cityId", cityId + "");
-        netUtils.get("Proj/Panev3.aspx", maps, new NetResponse() {
+        NetUtils.getInstance().get("Proj/Panev3.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {
 
@@ -221,7 +220,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
         HashMap<String, String> maps = new HashMap<>();
         maps.put("cityId", cityId + "");
 
-        netUtils.get(NetConfig.BASE_URL2,
+        NetUtils.getInstance().get(NetConfig.BASE_URL2,
                 "index/banner/13/list.json",
                 maps, new NetResponse() {
                     @Override

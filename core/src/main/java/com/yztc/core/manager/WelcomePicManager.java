@@ -14,7 +14,9 @@ import com.yztc.core.utils.SPUtils;
 
 public class WelcomePicManager {
 
-    public static final String SP_WELCOME = "welcome_pic";
+    private static final String SP_WELCOME = "welcome_pic";
+    private static String currDownUrl = "";  //用于防止多次下载
+
 
     public static void savePic(final Context context, final String url) {
 
@@ -35,6 +37,12 @@ public class WelcomePicManager {
                 mgr.remove(lastUrl);
             }
         }
+
+        //防止一张图片下载多次
+        if (currDownUrl.equals(url)) {
+            return;
+        }
+        currDownUrl = url;
 
         //进行下载
         mgr.downLoadFile(url, new DownLoadFileManager.OnDownListener() {

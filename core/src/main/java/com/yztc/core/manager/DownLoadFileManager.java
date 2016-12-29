@@ -2,6 +2,7 @@ package com.yztc.core.manager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.yztc.core.utils.AppUtils;
 import com.yztc.core.utils.FileUtils;
@@ -68,9 +69,10 @@ public class DownLoadFileManager {
      *
      * @param key
      * @param in
+     * @param contentLength
      * @return
      */
-    public boolean put(String key, InputStream in) {
+    public boolean put(String key, InputStream in, int contentLength) {
         String keyForDisk = getKey(key);
         DiskLruCache.Editor edit = null;
         BufferedOutputStream bw = null;
@@ -85,8 +87,11 @@ public class DownLoadFileManager {
 
             byte[] b = new byte[1024 * 5];
             int l = 0;
+            int progress = 0;
             while ((l = br.read(b)) != -1) {
                 bw.write(b, 0, l);
+                progress += l;
+                Log.i(">>>>>>>", progress * 100f / contentLength + "%");
             }
             bw.flush();
             edit.commit();//write CLEAN
@@ -182,6 +187,7 @@ public class DownLoadFileManager {
         }.start();
     }
 
+
     /**
      * 下载文件
      *
@@ -196,11 +202,12 @@ public class DownLoadFileManager {
             conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(30 * 1000);
             conn.setReadTimeout(30 * 1000);
+            int contentLength = conn.getContentLength();
             int code = conn.getResponseCode();
             if (code == 200) {
                 stream = conn.getInputStream();
                 //缓存
-                if (put(urlPath, stream)) {
+                if (put(urlPath, stream, contentLength)) {
                     if (l != null) {
                         l.onOk();
                     }

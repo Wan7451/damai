@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.yztc.core.manager.NewVersionManager;
 import com.yztc.core.manager.WelcomePicManager;
 import com.yztc.core.utils.SPUtils;
 import com.yztc.damai.help.Constant;
@@ -25,7 +27,6 @@ import java.util.HashMap;
 
 public class BackgroundService extends Service {
 
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,15 +37,38 @@ public class BackgroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-//        HandlerThread thread = new HandlerThread("UpWelcomePicService");
-//        thread.start();
-//        Handler handler = new Handler(thread.getLooper());
-
         //获得图片下载地址
         dowmWelcomePic();
 
+        checkNewVersion();
+
         return START_STICKY_COMPATIBILITY;
     }
+
+    private void checkNewVersion() {
+        NetUtils.getInstance().get(
+                "/Update/getAndroidVersion.aspx",
+                null,
+                new NetResponse() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        UpBean upBean = gson.fromJson(response, UpBean.class);
+                        NewVersionManager.checkViersion(BackgroundService.this,
+                                upBean.version,
+                                upBean.download,
+                                upBean.message,
+                                upBean.isForcedUpdate);
+
+                    }
+
+                    @Override
+                    public void onError(String erroe) {
+
+                    }
+                });
+    }
+
 
     private void dowmWelcomePic() {
         HashMap<String, String> maps = new HashMap<>();
@@ -93,5 +117,46 @@ public class BackgroundService extends Service {
         Intent i = new Intent();
         i.setClass(context, BackgroundService.class);
         context.stopService(i);
+    }
+
+
+    static class UpBean {
+
+        private int version;
+        private String download;
+        private String message;
+        private int isForcedUpdate;
+
+        public int getVersion() {
+            return version;
+        }
+
+        public void setVersion(int version) {
+            this.version = version;
+        }
+
+        public String getDownload() {
+            return download;
+        }
+
+        public void setDownload(String download) {
+            this.download = download;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getIsForcedUpdate() {
+            return isForcedUpdate;
+        }
+
+        public void setIsForcedUpdate(int isForcedUpdate) {
+            this.isForcedUpdate = isForcedUpdate;
+        }
     }
 }
