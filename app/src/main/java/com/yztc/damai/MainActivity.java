@@ -192,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             App.getContext().onDestory();
             super.onBackPressed();
-            System.exit(0);
         }
     }
 
