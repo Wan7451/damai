@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.router.literouter.lib.annotations.ClassName;
-import android.router.literouter.lib.annotations.Key;
-import android.router.literouter.lib.annotations.RequestCode;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.SparseArray;
+
+import com.yztc.core.literouter.annotations.ClassName;
+import com.yztc.core.literouter.annotations.Key;
+import com.yztc.core.literouter.annotations.RequestCode;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
