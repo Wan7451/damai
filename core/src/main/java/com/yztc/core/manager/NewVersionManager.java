@@ -116,6 +116,9 @@ public class NewVersionManager {
         protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+
+            setTitle("");
+
             filePath = getIntent().getStringExtra("filePath");
             message = getIntent().getStringExtra("message");
             isForcedUpdate = getIntent().getIntExtra("isForcedUpdate", 0);
