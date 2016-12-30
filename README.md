@@ -39,4 +39,6 @@
 
 * 限时本地缓存数据 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/utils/LimitDataCache.java)
 
+* LiteRoute 界面跳转 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/literouter/_readme.md)
+
 
