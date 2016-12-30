@@ -3,6 +3,9 @@ package com.yztc.core.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.yztc.core.App;
 
@@ -49,6 +52,49 @@ public class AppUtils {
             LogUtils.e(e.getLocalizedMessage());
         }
         return new PackageInfo();
+    }
+
+
+    /**
+     * 获取设备的制造商
+     *
+     * @return 设备制造商
+     */
+    public static String getDeviceManufacture() {
+        return android.os.Build.MANUFACTURER;
+    }
+
+    /**
+     * 获取设备名称
+     *
+     * @return 设备名称
+     */
+    public static String getDeviceName() {
+        return android.os.Build.MODEL;
+    }
+
+    /**
+     * 获取系统版本号
+     *
+     * @return 系统版本号
+     */
+    public static String getSystemVersion() {
+        return android.os.Build.VERSION.RELEASE;
+    }
+
+    /**
+     * 获取设备号
+     *
+     * @param context
+     * @return
+     */
+    public static String getDeviceIMEI(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null || TextUtils.isEmpty(telephonyManager.getDeviceId())) {
+            return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        } else {
+            return telephonyManager.getDeviceId();
+        }
     }
 
 }

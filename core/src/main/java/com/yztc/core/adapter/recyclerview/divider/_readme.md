@@ -3,6 +3,7 @@
 # GitHub
 
 [GitHub URL] (https://github.com/hiphonezhu/RecyclerView-FlexibleDivider)
+[GitHub URL] (https://github.com/yqritc/RecyclerView-FlexibleDivider)
 
 
 # Usage

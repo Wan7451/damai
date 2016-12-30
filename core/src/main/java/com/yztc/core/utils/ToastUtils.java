@@ -1,10 +1,8 @@
 package com.yztc.core.utils;
 
 
+import android.content.Context;
 import android.widget.Toast;
-
-import com.yztc.core.App;
-import com.yztc.core.views.toastcompat.ToastCompat;
 
 
 /**
@@ -12,23 +10,42 @@ import com.yztc.core.views.toastcompat.ToastCompat;
  *
  * 解决Toast重叠问题
  *
+ *
+ *  ToastCompat
  */
 
 public class ToastUtils {
 
+    private static Context mContext;
+    private static ToastUtils mInstance;
+    private Toast mToast;
 
-
-
-    public static void show(String text){
-        ToastCompat.makeText(App.getContext(), text,
-                Toast.LENGTH_SHORT).show();
+    public static ToastUtils getInstance() {
+        return mInstance;
     }
 
-    public static void showLong(String text){
-        ToastCompat.makeText(App.getContext(), text,
-                Toast.LENGTH_LONG).show();
+    public static void init(Context ctx) {
+        mInstance = new ToastUtils(ctx);
     }
 
-    private ToastUtils(){}
+    private ToastUtils(Context ctx) {
+        mContext = ctx;
+    }
+
+    public void showToast(String text) {
+        if (mToast == null) {
+            mToast = Toast.makeText(mContext, text, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_LONG);
+        }
+        mToast.show();
+    }
+
+    public void cancelToast() {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+    }
 
 }

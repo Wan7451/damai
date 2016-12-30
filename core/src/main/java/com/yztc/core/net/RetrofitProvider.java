@@ -37,7 +37,11 @@ public class RetrofitProvider {
                 .baseUrl(builder.baseUrl)
                 .client(client(builder))
                 //.serializeNulls  解决 gson  null值不进行转换问题
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
+                .addConverterFactory(GsonConverterFactory.create(
+                        new GsonBuilder()
+                                .serializeNulls()
+                                .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                                .create()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }

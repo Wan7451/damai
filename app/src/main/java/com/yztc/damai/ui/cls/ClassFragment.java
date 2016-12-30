@@ -3,13 +3,9 @@ package com.yztc.damai.ui.cls;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yztc.core.base.BaseFragment;
@@ -25,7 +21,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -51,18 +46,12 @@ public class ClassFragment extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_class, container, false);
-        ButterKnife.bind(this, root);
-        return root;
+    protected int getLayoutResource() {
+        return R.layout.fragment_class;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
+    protected void onInitView(Bundle savedInstanceState) {
         cityName = (String) SPUtils.get(getContext(), Constant.SP_CURR_CITY_N, "北京");
         choiceCity.setText(cityName);
 
@@ -81,6 +70,10 @@ public class ClassFragment extends BaseFragment {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    @Override
+    protected void onInitData() {
+
+    }
 
     @Override
     public void onAttach(Context context) {
