@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,7 +19,7 @@ import butterknife.ButterKnife;
 
 public abstract class BaseFragment extends Fragment {
 
-    protected View rootView;
+    protected View mRootView;
     protected Context mContext = null;//context
 
     protected abstract int getLayoutResource();
@@ -51,12 +52,12 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (getLayoutResource() != 0) {
-            rootView = inflater.inflate(getLayoutResource(), null);
+            mRootView = inflater.inflate(getLayoutResource(), null);
         } else {
-            rootView = super.onCreateView(inflater, container, savedInstanceState);
+            mRootView = super.onCreateView(inflater, container, savedInstanceState);
         }
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        ButterKnife.bind(this, mRootView);
+        return mRootView;
     }
 
 
@@ -68,7 +69,15 @@ public abstract class BaseFragment extends Fragment {
         }
         this.onInitView(savedInstanceState);
         initPreData(savedInstanceState);
-        this.onInitData();
+        //自动加载
+        mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //在布局加载完成之后，才能执行，不然看不到效果
+                onInitData();
+                mRootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
     }
 
     @Override

@@ -1,13 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.yztc.damai.ui.mine.MineFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <variable
+            name="listener"
+            type="com.yztc.damai.ui.mine.MineFragment.BtnClick" />
+
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context="com.yztc.damai.ui.mine.MineFragment">
 
-</FrameLayout>
+
+        <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp" />
+
+        <Button
+            android:id="@+id/user_setIcon"
+            android:layout_marginTop="20dp"
+            android:onClick="@{listener::onSetIconClick}"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_icon"
+            android:text="上传头像" />
+
+    </RelativeLayout>
+
+</layout>

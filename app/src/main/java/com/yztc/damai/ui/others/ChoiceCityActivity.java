@@ -3,6 +3,7 @@ package com.yztc.damai.ui.others;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView;
 import com.diegocarloslima.fgelv.lib.WrapperExpandableListAdapter;
 import com.google.gson.Gson;
-import com.yztc.core.base.BaseActivity;
 import com.yztc.core.utils.DensityUtil;
 import com.yztc.core.utils.SPUtils;
 import com.yztc.core.views.SideBar;
@@ -39,7 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChoiceCityActivity extends BaseActivity {
+public class ChoiceCityActivity extends AppCompatActivity {
 
     @BindView(R.id.cityList)
     FloatingGroupExpandableListView cityList;

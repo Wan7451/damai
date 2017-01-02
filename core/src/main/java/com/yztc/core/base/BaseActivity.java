@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
+import com.yztc.core.manager.ActivityStackManager;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -71,10 +73,32 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.onInitView(savedInstanceState);
         initPreData(savedInstanceState);
-        this.onInitData();
+
         if (isNeedInitEventBus()) {
             EventBus.getDefault().register(this);
         }
+        //入栈
+        ActivityStackManager.getInstance().pushActivity(this);
+    }
+
+    private boolean isFrist = true;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && isFrist) {
+            isFrist = false;
+            //页面加载完成，加载数据
+            this.onInitData();
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //出栈
+        ActivityStackManager.getInstance().popActivity(this);
     }
 
     @Override

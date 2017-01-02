@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (System.currentTimeMillis() - curr > 2000) {
             curr = System.currentTimeMillis();
-            ToastUtils.show("再按一次退出");
+            ToastUtils.getInstance().showToast("再按一次退出");
         } else {
             App.getContext().onDestory();
             super.onBackPressed();

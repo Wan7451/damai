@@ -38,7 +38,7 @@ public class ImageLoader {
 
     private static final int SOFT_CACHE_SIZE = 20;
     private static final int DISK_CACHE_SIZE = 20 * 1024 * 1024;
-    private static final int MAX_THREAD_NUM = 10;
+    private static final int MAX_THREAD_NUM = 100;
 
     private LruCache<String, Bitmap> mLruCache;
     private LinkedHashMap<String, SoftReference<Bitmap>> mSoftCache;

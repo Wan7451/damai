@@ -2,10 +2,7 @@ package com.yztc.core.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * Created by wanggang on 2016/12/12.
@@ -18,7 +15,6 @@ public abstract class LazyFragment extends BaseFragment {
     protected boolean isInited;  //是否初始化过
     protected boolean needInit;  //是否需要初始化
 
-    protected View root;
 
     //在onCreateView()之前执行
     //判断当前Fragment是否显示
@@ -36,23 +32,26 @@ public abstract class LazyFragment extends BaseFragment {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root=  inflater.inflate(getLayoutId(),container,false);
-        return root;
+    protected int getLayoutResource() {
+        return getLayoutId();
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    protected void onInitView(Bundle savedInstanceState) {
         if(needInit){
             init();
         }
         isCreated=true;
     }
 
+    @Override
+    protected void onInitData() {
+    }
+
+
     private void init(){
-        init(root);
+        init(mRootView);
         isInited=true;
     }
 

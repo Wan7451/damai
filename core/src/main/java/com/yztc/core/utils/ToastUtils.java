@@ -4,6 +4,8 @@ package com.yztc.core.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.yztc.core.App;
+
 
 /**
  * Created by wanggang on 2016/12/12.
@@ -21,10 +23,12 @@ public class ToastUtils {
     private Toast mToast;
 
     public static ToastUtils getInstance() {
+        if (mInstance == null)
+            init(App.getContext());
         return mInstance;
     }
 
-    public static void init(Context ctx) {
+    private static void init(Context ctx) {
         mInstance = new ToastUtils(ctx);
     }
 
@@ -35,6 +39,16 @@ public class ToastUtils {
     public void showToast(String text) {
         if (mToast == null) {
             mToast = Toast.makeText(mContext, text, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
+    }
+
+    public void showLong(String text) {
+        if (mToast == null) {
+            mToast = Toast.makeText(mContext, text, Toast.LENGTH_LONG);
         } else {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_LONG);

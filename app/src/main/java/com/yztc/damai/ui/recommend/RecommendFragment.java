@@ -120,7 +120,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
         bannerView.setOnBannerViewClick(new BannerViewPager.OnBannerViewClick() {
             @Override
             public void onBannerViewClick(int position) {
-                ToastUtils.show(banners.get(position).getName());
+                ToastUtils.getInstance().showToast(banners.get(position).getName());
             }
         });
     }

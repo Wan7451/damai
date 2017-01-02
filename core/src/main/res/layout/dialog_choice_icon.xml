@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="com.yztc.core.manager.usericon.UserIconManager.UserIconListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:onClick="@{listener.onChoiceCapture}"
+            android:id="@+id/userIcon_capture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="拍照" />
+
+        <Button
+            android:onClick="@{listener.onChoicePick}"
+            android:id="@+id/userIcon_pick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="从相册选择" />
+
+        <Button
+            android:onClick="@{listener.onCancle}"
+            android:id="@+id/userIcon_cancle"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="取消" />
+
+    </LinearLayout>
+
+
+</layout>

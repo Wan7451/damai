@@ -13,6 +13,7 @@ import android.text.TextUtils;
 
 import com.yztc.core.base.LoadResActivity;
 import com.yztc.core.image.ImageLoader;
+import com.yztc.core.manager.ActivityStackManager;
 import com.yztc.core.manager.DownLoadFileManager;
 import com.yztc.core.manager.LimitCacheManager;
 import com.yztc.core.utils.AppUtils;
@@ -52,11 +53,11 @@ public class App extends Application {
 
     //结束
     public void onDestory(){
+        ActivityStackManager.getInstance().onDestory();
         ImageLoader.getInstance().onDestroy();
         LimitCacheManager.getInstance().onDestroy();
         DownLoadFileManager.getInstance().onDestroy();
     }
-
 
     public static final String KEY_DEX2_SHA1 = "dex2-SHA1-Digest";
 

@@ -103,13 +103,13 @@ public class ClassItemFragment extends LazyFragment {
 
 
         //自动加载
-        root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 //在布局加载完成之后，才能执行，不然看不到效果
                 refreshLayout.setRefreshing(true);
                 loadData();
-                root.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mRootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
             }
         });
 
@@ -196,7 +196,7 @@ public class ClassItemFragment extends LazyFragment {
     }
 
     private void showErrorHint() {
-        ToastUtils.showLong("已经到底啦~~");
+        ToastUtils.getInstance().showLong("已经到底啦~~");
     }
 
     private void loadData() {

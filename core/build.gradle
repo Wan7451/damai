@@ -19,6 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -45,7 +48,9 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
-
+    //黄油刀
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    //7牛上传
+    compile 'com.qiniu:qiniu-android-sdk:7.3.+'
 }

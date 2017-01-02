@@ -58,4 +58,12 @@ public class FileUtils {
         return cache;
     }
 
+    public static File getTempCacheFile() {
+        File cache = new File(getCacheFloder(), "temp");
+        if (!cache.exists()) {
+            cache.mkdirs();
+        }
+        return cache;
+    }
+
 }
