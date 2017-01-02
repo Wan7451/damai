@@ -5,7 +5,7 @@
 
         <variable
             name="listener"
-            type="com.yztc.core.manager.usericon.UserIconManager.UserIconListener" />
+            type="com.yztc.core.manager.up_user_icon.UserIconManager.UserIconListener" />
     </data>
 
     <LinearLayout

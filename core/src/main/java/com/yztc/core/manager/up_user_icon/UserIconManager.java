@@ -1,4 +1,4 @@
-package com.yztc.core.manager.usericon;
+package com.yztc.core.manager.up_user_icon;
 
 import android.app.Activity;
 import android.content.Intent;
