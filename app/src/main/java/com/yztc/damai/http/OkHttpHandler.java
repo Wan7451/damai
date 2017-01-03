@@ -117,6 +117,8 @@ public class OkHttpHandler extends HttpHandler {
 
         final Request request = new Request.Builder()
                 .url(url.toString())
+                .addHeader("Connection", "Keep-Alive")
+                .addHeader("Accept-Encoding", "gzip")
                 .build();
 
         //下载  同步

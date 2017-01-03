@@ -41,4 +41,13 @@
 
 * LiteRoute 界面跳转 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/literouter/_readme.md)
 
+* 工厂模式 切换使用的网络库 [查看](https://github.com/Wan7451/damai/blob/master/app/src/main/java/com/yztc/damai/http/HttpHandlerFactory.java)
+
+* 欢迎页广告管理 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/manager/WelcomePicManager.java)
+
+* 新版本自动检测管理 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/manager/NewVersionManager.java)
+
+* 上传用户头像 Fragment Activity 都可用 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/manager/up_user_icon/UserIconManager.java)
+
+
 
