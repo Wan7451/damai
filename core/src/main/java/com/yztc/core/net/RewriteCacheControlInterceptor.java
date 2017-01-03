@@ -40,7 +40,7 @@ public class RewriteCacheControlInterceptor implements Interceptor {
                     .header("Cache-Control", "public, max-age=3600")
                     .build();
         } else {
-            int maxStale = 60 * 60 * 24;
+            int maxStale = 60 * 60;
             return originalResponse.newBuilder()
                     .removeHeader("Pragma")
                     .removeHeader("Cache-Control")

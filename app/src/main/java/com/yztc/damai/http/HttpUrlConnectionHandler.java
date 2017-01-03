@@ -2,7 +2,6 @@ package com.yztc.damai.http;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -17,8 +16,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -201,40 +198,7 @@ public class HttpUrlConnectionHandler extends HttpHandler {
         });
     }
 
-    private HashMap<String, String> getBasicParams() {
-        HashMap<String, String> basic = new HashMap<>();
-        basic.put("osType", NetConfig.osType);
-        basic.put("channel_from", NetConfig.channel_from);
-        basic.put("source", NetConfig.source);
-        basic.put("version", NetConfig.version);
-        basic.put("appType", NetConfig.appType);
 
-        return basic;
-    }
-
-    private String buildParams(@NonNull HashMap<String, String> maps) {
-        //公共参数
-        HashMap<String, String> basicParams = getBasicParams();
-        //业务参数
-        if (maps != null && maps.size() > 0) {
-            basicParams.putAll(maps);
-        }
-        StringBuilder builder = new StringBuilder();
-        Iterator<Map.Entry<String, String>> iterator =
-                basicParams.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, String> next = iterator.next();
-            builder.append(next.getKey());
-            builder.append("=");
-            builder.append(next.getValue());
-            builder.append("&");
-        }
-        if (builder.length() > 0) {
-            builder.setLength(builder.length() - 1);
-        }
-
-        return builder.toString();
-    }
 
 
     private void logResponse(String response) {
@@ -257,8 +221,6 @@ public class HttpUrlConnectionHandler extends HttpHandler {
 
     @Override
     public void destory() {
-        threadPool.shutdown();
-        threadPool = null;
     }
 
 }

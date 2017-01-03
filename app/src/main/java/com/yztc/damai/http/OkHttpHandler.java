@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.yztc.core.net.BasicParamsInterceptor;
 import com.yztc.core.net.HttpLoggingInterceptor;
 import com.yztc.core.net.RewriteCacheControlInterceptor;
 import com.yztc.core.utils.FileUtils;
@@ -13,8 +12,6 @@ import com.yztc.damai.config.NetConfig;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -62,15 +59,15 @@ public class OkHttpHandler extends HttpHandler {
         RewriteCacheControlInterceptor cacheInterceptor = new RewriteCacheControlInterceptor();
 
 
-        BasicParamsInterceptor basicInterceptor = new BasicParamsInterceptor.Builder()
-                .addHeaderParam("Connection", "Keep-Alive")
-                .addHeaderParam("Accept-Encoding", "gzip")
-                .addQueryParam("osType", NetConfig.osType)
-                .addQueryParam("channel_from", NetConfig.channel_from)
-                .addQueryParam("source", NetConfig.source)
-                .addQueryParam("version", NetConfig.version)
-                .addQueryParam("appType", NetConfig.appType)
-                .build();
+//        BasicParamsInterceptor basicInterceptor = new BasicParamsInterceptor.Builder()
+//                .addHeaderParam("Connection", "Keep-Alive")
+//                .addHeaderParam("Accept-Encoding", "gzip")
+//                .addQueryParam("osType", NetConfig.osType)
+//                .addQueryParam("channel_from", NetConfig.channel_from)
+//                .addQueryParam("source", NetConfig.source)
+//                .addQueryParam("version", NetConfig.version)
+//                .addQueryParam("appType", NetConfig.appType)
+//                .build();
 
 
         File cacheFile = FileUtils.getHttpCacheFile();
@@ -84,7 +81,7 @@ public class OkHttpHandler extends HttpHandler {
                 .addInterceptor(interceptor)//Log拦截器
                 .addInterceptor(cacheInterceptor)//缓存拦截器
                 .addNetworkInterceptor(cacheInterceptor)
-                .addNetworkInterceptor(basicInterceptor)
+//                .addNetworkInterceptor(basicInterceptor)
                 .cache(cache)//配置缓存路径
                 .build();
         //保证回调在主线程执行
@@ -104,21 +101,12 @@ public class OkHttpHandler extends HttpHandler {
         url.append(baseUrl);
         url.append(path);
         url.append("?");
-        if (params != null && !params.isEmpty()) {
-            Set<Map.Entry<String, String>> entries = params.entrySet();
-            for (Map.Entry<String, String> entry : entries) {
-                url.append(entry.getKey());
-                url.append("=");
-                url.append(entry.getValue());
-                url.append("&");
-            }
-        }
-        url.setLength(url.length() - 1);
+        url.append(buildParams(params));
 
         final Request request = new Request.Builder()
                 .url(url.toString())
-                .addHeader("Connection", "Keep-Alive")
-                .addHeader("Accept-Encoding", "gzip")
+//                .addHeader("Connection", "Keep-Alive")
+//                .addHeader("Accept-Encoding", "gzip")
                 .build();
 
         //下载  同步
@@ -138,18 +126,19 @@ public class OkHttpHandler extends HttpHandler {
 
             @Override
             public void onResponse(final Call call, final okhttp3.Response response) throws IOException {
+
+                final String data = new String(response.body().bytes(), "UTF-8");
+                Log.i(">>>>>>>>>", call.request().url().toString());
+                Log.i(">>>>>>>>>", data);
+
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
 
                         if (response.isSuccessful()) {
                             if (callback != null) {
-                                try {
-                                    //成功
-                                    callback.onResponse(response.body().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                //成功
+                                callback.onResponse(data);
                             }
                         } else {
                             if (callback != null) {
