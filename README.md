@@ -47,7 +47,7 @@
 
 * 新版本自动检测管理 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/manager/NewVersionManager.java)
 
-* 上传用户头像 Fragment Activity 都可用 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/manager/up_user_icon/UserIconManager.java)
+* 上传用户头像 Fragment Activity 都可用 [查看](https://github.com/Wan7451/damai/blob/master/core/src/main/java/com/yztc/core/manager/up_user_icon/_readme.md)
 
 
 
