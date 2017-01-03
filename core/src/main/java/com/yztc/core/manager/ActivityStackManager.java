@@ -68,9 +68,10 @@ public class ActivityStackManager {
     }
 
     public void onDestory() {
-        while (!activityStack.empty()) {
-            instance.popActivity();
-        }
+        if (activityStack != null)
+            while (!activityStack.empty()) {
+                instance.popActivity();
+            }
         activityStack = null;
         instance = null;
     }

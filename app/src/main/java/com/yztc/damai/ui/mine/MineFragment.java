@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yztc.core.image.ImageLoader;
-import com.yztc.core.manager.usericon.UserIconHandlerListener;
-import com.yztc.core.manager.usericon.UserIconManager;
+import com.yztc.core.manager.up_user_icon.UserIconHandlerListener;
+import com.yztc.core.manager.up_user_icon.UserIconManager;
 import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.R;
 import com.yztc.damai.databinding.FragmentMineBinding;

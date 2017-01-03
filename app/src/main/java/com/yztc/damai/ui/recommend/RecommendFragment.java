@@ -23,8 +23,8 @@ import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
 import com.yztc.damai.help.Constant;
 import com.yztc.damai.help.Event;
-import com.yztc.damai.net.NetResponse;
-import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.http.HttpHandlerFactory;
+import com.yztc.damai.http.NetResponse;
 import com.yztc.damai.ui.others.ChoiceCityActivity;
 import com.yztc.damai.view.ClassifyView;
 import com.yztc.damai.view.Type10View;
@@ -128,7 +128,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
     private void loadData() {
         HashMap<String, String> maps = new HashMap<>();
         maps.put("cityId", cityId + "");
-        NetUtils.getInstance().get("Proj/Panev3.aspx", maps, new NetResponse() {
+        HttpHandlerFactory.getHttpHandler().get("Proj/Panev3.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {
 
@@ -220,7 +220,7 @@ public class RecommendFragment extends Fragment implements SwipeRefreshLayout.On
         HashMap<String, String> maps = new HashMap<>();
         maps.put("cityId", cityId + "");
 
-        NetUtils.getInstance().get(NetConfig.BASE_URL2,
+        HttpHandlerFactory.getHttpHandler().get(NetConfig.BASE_URL2,
                 "index/banner/13/list.json",
                 maps, new NetResponse() {
                     @Override

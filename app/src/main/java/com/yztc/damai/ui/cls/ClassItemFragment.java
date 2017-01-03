@@ -19,8 +19,8 @@ import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.R;
 import com.yztc.damai.help.Constant;
 import com.yztc.damai.help.Event;
-import com.yztc.damai.net.NetResponse;
-import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.http.HttpHandlerFactory;
+import com.yztc.damai.http.NetResponse;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -164,7 +164,7 @@ public class ClassItemFragment extends LazyFragment {
         params.put("p", ++page + "");
         params.put("cityId", cityId + "");
 
-        NetUtils.getInstance().get("ProjLst.aspx", params, new NetResponse() {
+        HttpHandlerFactory.getHttpHandler().get("ProjLst.aspx", params, new NetResponse() {
             @Override
             public void onResponse(String response) {
                 refreshLayout.setRefreshing(false);
@@ -210,7 +210,7 @@ public class ClassItemFragment extends LazyFragment {
         params.put("p", page + "");
         params.put("cityId", cityId + "");
 
-        NetUtils.getInstance().get("ProjLst.aspx", params, new NetResponse() {
+        HttpHandlerFactory.getHttpHandler().get("ProjLst.aspx", params, new NetResponse() {
             @Override
             public void onResponse(String response) {
                 refreshLayout.setRefreshing(false);

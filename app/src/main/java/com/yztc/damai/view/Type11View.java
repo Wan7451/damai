@@ -17,8 +17,8 @@ import com.yztc.core.views.NoScrollListView;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
 import com.yztc.damai.help.Constant;
-import com.yztc.damai.net.NetResponse;
-import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.http.HttpHandlerFactory;
+import com.yztc.damai.http.NetResponse;
 import com.yztc.damai.ui.recommend.GuessLikeBean;
 import com.yztc.damai.ui.recommend.TypeViewBean;
 
@@ -66,7 +66,7 @@ public class Type11View extends TypeContainerView {
         maps.put("lon", "116.391");
         maps.put("lat", "39.907");
         maps.put("visitorId", "WDBSUDg%2FcM8DADI8fZp%2FGofv");
-        NetUtils.getInstance().get("proj/Intelligence/index.aspx", maps, new NetResponse() {
+        HttpHandlerFactory.getHttpHandler().get("proj/Intelligence/index.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {
                 try {

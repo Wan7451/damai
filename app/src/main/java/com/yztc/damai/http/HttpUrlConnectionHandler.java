@@ -1,4 +1,4 @@
-package com.yztc.damai.net;
+package com.yztc.damai.http;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.yztc.core.manager.LimitCacheManager;
+import com.yztc.core.utils.NetUtils;
 import com.yztc.damai.config.NetConfig;
 
 import java.io.BufferedReader;
@@ -25,7 +26,7 @@ import java.util.concurrent.Executors;
  * Created by wanggang on 2016/12/12.
  */
 
-public class NetUtils {
+public class HttpUrlConnectionHandler extends HttpHandler {
 
     //同时线程数量
     private static final int THREAD_NUM = 4;
@@ -37,24 +38,24 @@ public class NetUtils {
 
     public static final boolean DEBUG = true;
 
-    private static NetUtils instance = null;
+    private static HttpUrlConnectionHandler instance = null;
 
     private ExecutorService threadPool;
     private Handler mHandler;
 
-    private NetUtils() {
+    private HttpUrlConnectionHandler() {
         //线程池
         threadPool =
                 Executors.newFixedThreadPool(THREAD_NUM);
         mHandler = new Handler(Looper.getMainLooper());
     }
 
-    public static NetUtils getInstance() {
+    public static HttpUrlConnectionHandler getInstance() {
         //防止创建多个对象
         if (instance == null) {
-            synchronized (NetUtils.class) {
+            synchronized (HttpUrlConnectionHandler.class) {
                 if (instance == null) {
-                    instance = new NetUtils();
+                    instance = new HttpUrlConnectionHandler();
                 }
             }
         }
@@ -62,20 +63,15 @@ public class NetUtils {
     }
 
 
+    @Override
     public void get(String path,
                     HashMap<String, String> maps,
                     NetResponse response) {
         get(NetConfig.BASE_URL, path, maps, response);
     }
 
-    public void get(String path,
-                    HashMap<String, String> maps,
-                    NetResponse response,
-                    Handler handler) {
-        get(NetConfig.BASE_URL, path, maps, response, handler);
-    }
 
-
+    @Override
     public void get(String baseUrl,
                     String path,
                     HashMap<String, String> maps,
@@ -113,7 +109,7 @@ public class NetUtils {
                     return;
                 }
 
-                if (!NetStatusUtils.isConnect()) {
+                if (!NetUtils.isConnected()) {
                     handleError(response, "网络没有连接", handler);
                     return;
                 }
@@ -259,6 +255,7 @@ public class NetUtils {
         }
     }
 
+    @Override
     public void destory() {
         threadPool.shutdown();
         threadPool = null;

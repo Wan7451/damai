@@ -5,9 +5,9 @@ import android.text.TextUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
@@ -47,21 +47,24 @@ public class BasicParamsInterceptor implements Interceptor {
         Headers.Builder headerBuilder = request.headers().newBuilder();
 
         Headers headers = request.headers();
+
+        //添加Request 的Headers
+        requestBuilder.headers(headers);
+
+
+        //添加 headerParamsMap 中的 Headers
         if (headerParamsMap.size() > 0) {
-            Iterator iterator = headerParamsMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                if (headers.get((String) entry.getKey()) == null)
-                    headerBuilder.add((String) entry.getKey(), (String) entry.getValue());
+            Set<Map.Entry<String, String>> entries = headerParamsMap.entrySet();
+            for (Map.Entry<String, String> entry : entries) {
+                headerBuilder.add(entry.getKey(), entry.getValue());
             }
-            requestBuilder.headers(headerBuilder.build());
         }
 
+        //添加 headerLinesList 中的 Headers
         if (headerLinesList.size() > 0) {
             for (String line : headerLinesList) {
                 headerBuilder.add(line);
             }
-            requestBuilder.headers(headerBuilder.build());
         }
         // process header params end
 
@@ -112,12 +115,13 @@ public class BasicParamsInterceptor implements Interceptor {
     // func to inject params into url
     private Request injectParamsIntoUrl(HttpUrl.Builder httpUrlBuilder, Request.Builder requestBuilder, Map<String, String> paramsMap) {
         if (paramsMap.size() > 0) {
-            Iterator iterator = paramsMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                httpUrlBuilder.addQueryParameter((String) entry.getKey(), (String) entry.getValue());
+
+            Set<Map.Entry<String, String>> entries = paramsMap.entrySet();
+            for (Map.Entry<String, String> entry : entries) {
+                httpUrlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
             }
             requestBuilder.url(httpUrlBuilder.build());
+
             return requestBuilder.build();
         }
 

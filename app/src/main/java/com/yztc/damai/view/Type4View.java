@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.GridLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -52,8 +51,6 @@ public class Type4View extends TypeContainerView {
             int count = 0;
             int i = 0;
             while (count < dataList.size()) {
-
-                Log.i("===", i + "," + x + "," + y);
 
                 if (i % 3 == 1) {
                     View v = new View(getContext());

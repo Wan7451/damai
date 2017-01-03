@@ -16,8 +16,8 @@ import com.yztc.core.utils.SPUtils;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
 import com.yztc.damai.help.Constant;
-import com.yztc.damai.net.NetResponse;
-import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.http.HttpHandlerFactory;
+import com.yztc.damai.http.NetResponse;
 import com.yztc.damai.ui.recommend.RecommendBean;
 import com.yztc.damai.ui.recommend.TypeViewBean;
 
@@ -64,7 +64,7 @@ public class Type6View extends TypeContainerView {
         HashMap<String,String> maps=new HashMap<>();
         int cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
         maps.put("cityId", cityId + "");
-        NetUtils.getInstance().get("proj/HotProjV1.aspx", maps, new NetResponse() {
+        HttpHandlerFactory.getHttpHandler().get("proj/HotProjV1.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {
                 try {

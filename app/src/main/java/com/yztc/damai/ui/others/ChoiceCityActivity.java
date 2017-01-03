@@ -24,8 +24,8 @@ import com.yztc.core.views.flowlayout.TagFlowLayout;
 import com.yztc.damai.R;
 import com.yztc.damai.help.Constant;
 import com.yztc.damai.help.Event;
-import com.yztc.damai.net.NetResponse;
-import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.http.HttpHandlerFactory;
+import com.yztc.damai.http.NetResponse;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -161,7 +161,7 @@ public class ChoiceCityActivity extends AppCompatActivity {
 
         HashMap<String, String> maps = new HashMap<>();
         maps.put("useCash", false + "");
-        NetUtils.getInstance().get("ncitylistv1.aspx", maps, new NetResponse() {
+        HttpHandlerFactory.getHttpHandler().get("ncitylistv1.aspx", maps, new NetResponse() {
             @Override
             public void onResponse(String response) {
                 try {

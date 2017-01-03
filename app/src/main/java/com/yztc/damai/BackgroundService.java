@@ -12,8 +12,8 @@ import com.yztc.core.manager.NewVersionManager;
 import com.yztc.core.manager.WelcomePicManager;
 import com.yztc.core.utils.SPUtils;
 import com.yztc.damai.help.Constant;
-import com.yztc.damai.net.NetResponse;
-import com.yztc.damai.net.NetUtils;
+import com.yztc.damai.http.HttpHandlerFactory;
+import com.yztc.damai.http.NetResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +46,7 @@ public class BackgroundService extends Service {
     }
 
     private void checkNewVersion() {
-        NetUtils.getInstance().get(
+        HttpHandlerFactory.getHttpHandler().get(
                 "/Update/getAndroidVersion.aspx",
                 null,
                 new NetResponse() {
@@ -76,7 +76,7 @@ public class BackgroundService extends Service {
         int cityId = (int) SPUtils.get(this, Constant.SP_CURR_CITY, 852);
         maps.put("cityid", cityId + "");
         maps.put("version", "50609");
-        NetUtils.getInstance().get(
+        HttpHandlerFactory.getHttpHandler().get(
                 "Other/WelcomePagePicv1.aspx",
                 maps,
                 new NetResponse() {
