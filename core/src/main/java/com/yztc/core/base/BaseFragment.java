@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.bumptech.glide.Glide;
+
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
@@ -87,4 +89,14 @@ public abstract class BaseFragment extends Fragment {
             EventBus.getDefault().unregister(this);
         }
     }
+
+
+    //在系统内存不足，所有后台程序（优先级为background的进程，
+    // 不是指后台运行的进程）都被杀死时，系统会调用OnLowMemory。
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Glide.get(getContext()).clearMemory();
+    }
+
 }

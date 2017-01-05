@@ -1,8 +1,10 @@
 package com.yztc.core.base;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
+import com.bumptech.glide.Glide;
 import com.yztc.core.manager.ActivityStackManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -134,6 +137,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void replaceFragment(int id, Fragment fragment) {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         supportFragmentManager.beginTransaction().replace(id, fragment).commit();
+    }
+
+
+    //Android 4.0 之后提供的一个API，它的主要作用是提示开发者在系统内存不足的时候，
+    // 通过处理部分资源来释放内存，从而避免被 Android 系统杀死。
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        Glide.get(this).trimMemory(level);
+    }
+
+    //在系统内存不足，所有后台程序（优先级为background的进程，
+    // 不是指后台运行的进程）都被杀死时，系统会调用OnLowMemory。
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Glide.get(this).clearMemory();
     }
 
 

@@ -1,5 +1,7 @@
 package com.yztc.damai.ui.cls;
 
+import android.util.Log;
+
 import com.bumptech.glide.ListPreloader;
 
 /**
@@ -15,6 +17,7 @@ public abstract class PreloadViewSize implements ListPreloader.PreloadSizeProvid
 
     @Override
     public int[] getPreloadSize(ClassBean item, int adapterPosition, int perItemPosition) {
+        Log.i("==========", "adapterPosition:" + adapterPosition + ",perItemPosition:" + perItemPosition);
         return getViewSize();
     }
 }

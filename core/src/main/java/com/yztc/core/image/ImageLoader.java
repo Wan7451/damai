@@ -31,8 +31,13 @@ import java.util.concurrent.Executors;
 
 /**
  * Created by wanggang on 2016/12/12.
+ *
+ * 手动封装的图片加载库
+ *
+ *
  */
 //UIL  Picasso Glide Fresco
+@Deprecated
 public class ImageLoader {
 
 

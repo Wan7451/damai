@@ -109,7 +109,7 @@ public class ClassItemFragment extends LazyFragment {
         PreloadViewSize size = new PreloadViewSize() {
             @Override
             public int[] getViewSize() {
-                return new int[]{10, 10};
+                return new int[]{100, 100};
             }
         };
 

@@ -39,6 +39,9 @@ public class PreloadMProvider implements
 
     @Override
     public GenericRequestBuilder getPreloadRequestBuilder(ClassBean item) {
+
+        Log.i("==========", "getPreloadRequestBuilder");
+
         String i = String.valueOf(item.getI());
         String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length() - 2) + "/" + i + "_n.jpg";
 
