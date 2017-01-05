@@ -19,13 +19,7 @@
 
         </activity>
         <activity android:name=".ui.others.ChoiceCityActivity" />
-        <activity
-            android:name="com.yztc.core.base.LoadResActivity"
-            android:alwaysRetainTaskState="false"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:process=":mini"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".SpalshActivity"
             android:theme="@style/Splash">
@@ -35,10 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="com.yztc.core.manager.NewVersionManager$DialogActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
         <service android:name=".BackgroundService" />
     </application>

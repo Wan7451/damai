@@ -78,7 +78,7 @@ public class OkHttpHandler extends HttpHandler {
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)//Log拦截器
+                //           .addInterceptor(interceptor)//Log拦截器
                 .addInterceptor(cacheInterceptor)//缓存拦截器
                 .addNetworkInterceptor(cacheInterceptor)
 //                .addNetworkInterceptor(basicInterceptor)
@@ -128,8 +128,6 @@ public class OkHttpHandler extends HttpHandler {
             public void onResponse(final Call call, final okhttp3.Response response) throws IOException {
 
                 final String data = new String(response.body().bytes(), "UTF-8");
-                Log.i(">>>>>>>>>", call.request().url().toString());
-                Log.i(">>>>>>>>>", data);
 
                 handler.post(new Runnable() {
                     @Override

@@ -3,7 +3,7 @@ package com.yztc.damai.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.yztc.core.utils.DensityUtil;
 import com.yztc.damai.ui.recommend.TypeViewBean;
 import com.yztc.damai.ui.recommend.TypeViewDataBean;
@@ -35,10 +35,10 @@ public class Type10View extends TypeContainerView {
         List<TypeViewDataBean> list = data.getList();
 
         for (int i = 0; i < list.size(); i++) {
-        TypeViewImage image=new TypeViewImage(getContext());
-        image.getLayoutParams().height= DensityUtil.dip2px(getContext(),100);
-        ImageLoader.getInstance().loadImages(image,list.get(i).getPicUrl(),false);
-        addView(image);
+            TypeViewImage image = new TypeViewImage(getContext());
+            image.getLayoutParams().height = DensityUtil.dip2px(getContext(), 100);
+            Glide.with(getContext()).load(list.get(i).getPicUrl()).into(image);
+            addView(image);
         }
     }
 }

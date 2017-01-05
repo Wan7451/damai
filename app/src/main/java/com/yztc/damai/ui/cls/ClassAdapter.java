@@ -1,6 +1,6 @@
 package com.yztc.damai.ui.cls;
 
-import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.signature.StringSignature;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
 
@@ -24,16 +25,16 @@ import butterknife.ButterKnife;
 
 public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
-
     private ArrayList<ClassBean> data;
-    private Context context;
+    private Fragment fragment;
     private LayoutInflater inflater;
+    private RequestManager requestManager;
 
-    public ClassAdapter(Context context, ArrayList<ClassBean> data) {
-        this.context = context;
+    public ClassAdapter(Fragment fragment, RequestManager requestManager, ArrayList<ClassBean> data) {
+        this.fragment = fragment;
         this.data = data;
-        inflater = LayoutInflater.from(context);
+        this.requestManager = requestManager;
+        inflater = LayoutInflater.from(fragment.getContext());
     }
 
     @Override
@@ -69,7 +70,9 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length()-2) + "/" + i + "_n.jpg";
 
-            ImageLoader.getInstance().loadImages(clsHolder.classImg, imageURI, false);
+            StringSignature signature = new StringSignature(imageURI);
+
+            requestManager.load(imageURI).dontAnimate().signature(signature).into(clsHolder.classImg);
         }
     }
 

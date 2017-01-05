@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.yztc.damai.ui.recommend.TypeViewBean;
 import com.yztc.damai.ui.recommend.TypeViewDataBean;
 
@@ -35,7 +35,7 @@ public class Type1View extends TypeContainerView {
         if (dataList.size() > 0) {
             for (int i = 0; i < dataList.size(); i++) {
                 ImageView img = new TypeViewImage(getContext());
-                ImageLoader.getInstance().loadImages(img, dataList.get(i).getPicUrl(), false);
+                Glide.with(getContext()).load(dataList.get(i).getPicUrl()).into(img);
                 addView(img);
             }
         }

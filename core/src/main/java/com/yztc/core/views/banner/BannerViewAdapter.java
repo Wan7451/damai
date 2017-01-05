@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 
 import java.util.ArrayList;
 
@@ -23,11 +23,9 @@ public class BannerViewAdapter extends PagerAdapter {
     private ArrayList<String> datas;
     private ArrayList<ImageView> views;
     private Context context;
-    private ImageLoader imageLoader;
 
     public BannerViewAdapter(Context context, ArrayList<String> data) {
         this.context = context;
-        this.imageLoader = ImageLoader.getInstance();
         views = new ArrayList<>();  //所有的要显示的组件
         datas = new ArrayList<>();  //要显示的数据
         addBannerViews(data);       //生成 views
@@ -75,7 +73,7 @@ public class BannerViewAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         ImageView view = views.get(position % datas.size());
         String url = datas.get(position % datas.size());
-        imageLoader.loadImages(view, url, true);
+        Glide.with(context).load(url).priority(Priority.IMMEDIATE).into(view);
         container.addView(view);
         return view;
     }

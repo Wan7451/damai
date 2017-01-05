@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.yztc.core.manager.up_user_icon.UserIconHandlerListener;
 import com.yztc.core.manager.up_user_icon.UserIconManager;
 import com.yztc.core.utils.ToastUtils;
@@ -73,7 +73,7 @@ public class MineFragment extends Fragment {
             @Override
             public void onUp2ServerOk(String url) {
                 Log.i("==========>>", url);
-                ImageLoader.getInstance().loadImages(binding.userIcon, url, true);
+                Glide.with(MineFragment.this).load(url).into(binding.userIcon);
             }
 
             @Override

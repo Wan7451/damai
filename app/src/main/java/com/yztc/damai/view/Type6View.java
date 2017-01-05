@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.yztc.core.image.ImageLoader;
 import com.yztc.core.utils.SPUtils;
 import com.yztc.damai.R;
 import com.yztc.damai.config.NetConfig;
@@ -119,11 +119,7 @@ public class Type6View extends TypeContainerView {
 
                 String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length() - 2) + "/" + i + "_n.jpg";
 
-                ImageLoader.getInstance().loadImages(
-                        ((RecommendHolder) holder).recommendIcon,
-                        imageURI,
-                        true
-                );
+                Glide.with(context).load(imageURI).into(((RecommendHolder) holder).recommendIcon);
             }
         }
 

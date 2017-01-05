@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.ImageView;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.yztc.core.utils.DensityUtil;
 import com.yztc.damai.ui.recommend.TypeViewBean;
 import com.yztc.damai.ui.recommend.TypeViewDataBean;
@@ -50,7 +50,7 @@ public class Type3View extends TypeContainerView {
             for (int i = 0; i < dataList.size(); i++) {
                 ImageView img = new ImageView(getContext());
 
-                ImageLoader.getInstance().loadImages(img, dataList.get(i).getPicUrl(), false);
+                Glide.with(getContext()).load(dataList.get(i).getPicUrl()).into(img);
                 GridLayout.Spec columnSpec = GridLayout.spec(y);
                 GridLayout.Spec rowSpec;
                 //设置跨行

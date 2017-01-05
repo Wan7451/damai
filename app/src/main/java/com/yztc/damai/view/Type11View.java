@@ -9,8 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.yztc.core.image.ImageLoader;
 import com.yztc.core.utils.DensityUtil;
 import com.yztc.core.utils.SPUtils;
 import com.yztc.core.views.NoScrollListView;
@@ -135,10 +135,7 @@ public class Type11View extends TypeContainerView {
 
             String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length() - 2) + "/" + i + "_n.jpg";
 
-            ImageLoader.getInstance().loadImages(
-                    holder.guesslikeIcon,
-                    imageURI,
-                    true);
+            Glide.with(context).load(imageURI).into(holder.guesslikeIcon);
 
             return convertView;
         }

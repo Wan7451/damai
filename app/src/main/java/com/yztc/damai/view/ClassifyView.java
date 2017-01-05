@@ -19,7 +19,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.yztc.damai.R;
 import com.yztc.damai.ui.recommend.ClassifyBean;
 import com.yztc.damai.ui.recommend.HeadLineBean;
@@ -146,7 +146,7 @@ public class ClassifyView extends RelativeLayout {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof ClassifyAdapter.ClassifyHolder) {
                 ((ClassifyAdapter.ClassifyHolder) holder).classifyIcon.setImageResource(R.mipmap.ic_launcher);
-                ImageLoader.getInstance().loadImages(((ClassifyAdapter.ClassifyHolder) holder).classifyIcon, classifys.get(position).getImg(), false);
+                Glide.with(context).load(classifys.get(position).getImg()).into(((ClassifyAdapter.ClassifyHolder) holder).classifyIcon);
                 ((ClassifyAdapter.ClassifyHolder) holder).classifyTitle.setText(classifys.get(position).getName());
             }
         }

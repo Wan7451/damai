@@ -5,6 +5,22 @@
     <application android:allowBackup="true" android:label="@string/app_name"
         android:supportsRtl="true">
 
+        <activity
+            android:name="com.yztc.core.base.LoadResActivity"
+            android:alwaysRetainTaskState="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:process=":mini"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.yztc.core.manager.NewVersionManager$DialogActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
+        <meta-data
+            android:name="com.yztc.core.glide.CustomGlideModel"
+            android:value="GlideModule" />
+
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.yztc.core.image.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.yztc.core.utils.DensityUtil;
 import com.yztc.damai.ui.recommend.TypeViewBean;
 import com.yztc.damai.ui.recommend.TypeViewDataBean;
@@ -66,7 +66,7 @@ public class Type4View extends TypeContainerView {
                     int pd = DensityUtil.dip2px(getContext(), 5);
                     img.setPadding(pd, pd, pd, pd);
                     img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    ImageLoader.getInstance().loadImages(img, dataList.get(count).getPicUrl(), false);
+                    Glide.with(getContext()).load(dataList.get(count).getPicUrl()).into(img);
                     GridLayout.Spec rowSpec = GridLayout.spec(x);     //设置它的行和列
                     GridLayout.Spec columnSpec = GridLayout.spec(y);
                     GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);

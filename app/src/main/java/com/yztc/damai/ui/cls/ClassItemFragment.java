@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.gson.Gson;
 import com.yztc.core.base.LazyFragment;
+import com.yztc.core.glide.RecyclerViewPreloader;
 import com.yztc.core.utils.SPUtils;
 import com.yztc.core.utils.ToastUtils;
 import com.yztc.damai.R;
@@ -42,7 +45,6 @@ public class ClassItemFragment extends LazyFragment {
     private RecyclerView recyclerView;
     private ViewStub stubView;
     private View emptyView;
-    private String cityName;
 
     public ClassItemFragment() {
     }
@@ -88,11 +90,13 @@ public class ClassItemFragment extends LazyFragment {
                 getResources().getColor(R.color.yellow)
         );
 
+        RequestManager requestManager = Glide.with(this);
+
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ClassAdapter(getContext(), data);
+        adapter = new ClassAdapter(this, requestManager, data);
         recyclerView.setAdapter(adapter);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -100,6 +104,18 @@ public class ClassItemFragment extends LazyFragment {
                 loadData();
             }
         });
+
+        PreloadMProvider provider = new PreloadMProvider(requestManager, data);
+        PreloadViewSize size = new PreloadViewSize() {
+            @Override
+            public int[] getViewSize() {
+                return new int[]{10, 10};
+            }
+        };
+
+        RecyclerViewPreloader<ClassBean> preloader =
+                new RecyclerViewPreloader<>(requestManager, provider, size, 3);
+        recyclerView.addOnScrollListener(preloader);
 
 
         //自动加载
