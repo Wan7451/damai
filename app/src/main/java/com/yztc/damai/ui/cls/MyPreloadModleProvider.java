@@ -12,41 +12,37 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by wanggang on 2017/1/5.
+ * Created by wanggang on 2017/1/6.
  */
 
-public class PreloadMProvider implements
-        ListPreloader.PreloadModelProvider<ClassBean> {
+public class MyPreloadModleProvider implements ListPreloader.PreloadModelProvider<ClassBean> {
 
-    private final List<ClassBean> data;
-    private final RequestManager requestManager;
+    private List<ClassBean> mData;
+    private RequestManager mRequestManager;
 
-
-    public PreloadMProvider(RequestManager requestManager, List<ClassBean> data) {
-        this.data = data;
-        this.requestManager = requestManager;
+    public MyPreloadModleProvider(RequestManager requestManager, List<ClassBean> data) {
+        this.mData = data;
+        this.mRequestManager = requestManager;
     }
 
+
+    //预加载的数据
     @Override
     public List<ClassBean> getPreloadItems(int position) {
-
-        Log.i("==========", position + "");
-
-        //返回一个含指定的对象 的不可变的列表。列表是可序列化的。
-        return Collections.singletonList(data.get(position));
+        return Collections.singletonList(mData.get(position));
     }
 
-
+    //进行加载
     @Override
     public GenericRequestBuilder getPreloadRequestBuilder(ClassBean item) {
 
-        Log.i("==========", "getPreloadRequestBuilder");
+        Log.i("===========", "预加载");
 
         String i = String.valueOf(item.getI());
         String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length() - 2) + "/" + i + "_n.jpg";
 
         StringSignature signature = new StringSignature(imageURI);
 
-        return requestManager.load(imageURI).signature(signature);
+        return mRequestManager.load(imageURI).signature(signature);
     }
 }

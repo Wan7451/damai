@@ -90,6 +90,7 @@ public class ClassItemFragment extends LazyFragment {
                 getResources().getColor(R.color.yellow)
         );
 
+
         RequestManager requestManager = Glide.with(this);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -105,16 +106,20 @@ public class ClassItemFragment extends LazyFragment {
             }
         });
 
-        PreloadMProvider provider = new PreloadMProvider(requestManager, data);
-        PreloadViewSize size = new PreloadViewSize() {
-            @Override
-            public int[] getViewSize() {
-                return new int[]{100, 100};
-            }
-        };
 
-        RecyclerViewPreloader<ClassBean> preloader =
-                new RecyclerViewPreloader<>(requestManager, provider, size, 3);
+        //预加载
+        MyPreloadModleProvider provider = new
+                MyPreloadModleProvider(requestManager, data);
+
+        MyPreloadViewSize viewSize = new MyPreloadViewSize();
+
+
+        RecyclerViewPreloader preloader = new RecyclerViewPreloader(
+                requestManager,
+                provider,
+                viewSize,
+                3);
+
         recyclerView.addOnScrollListener(preloader);
 
 

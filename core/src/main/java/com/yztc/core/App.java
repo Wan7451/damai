@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
 import com.yztc.core.base.LoadResActivity;
 import com.yztc.core.manager.ActivityStackManager;
 import com.yztc.core.manager.DownLoadFileManager;
@@ -52,6 +53,7 @@ public class App extends Application {
 
     //结束
     public void onDestory(){
+        Glide.get(this).clearMemory();
         ActivityStackManager.getInstance().onDestory();
         LimitCacheManager.getInstance().onDestroy();
         DownLoadFileManager.getInstance().onDestroy();

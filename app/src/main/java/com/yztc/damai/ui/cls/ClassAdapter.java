@@ -70,6 +70,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             String imageURI = NetConfig.BASR_IMG + i.substring(0, i.length()-2) + "/" + i + "_n.jpg";
 
+            //唯一标示
             StringSignature signature = new StringSignature(imageURI);
 
             requestManager.load(imageURI).dontAnimate().signature(signature).into(clsHolder.classImg);
