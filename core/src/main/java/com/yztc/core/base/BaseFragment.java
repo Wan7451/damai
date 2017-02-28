@@ -2,6 +2,7 @@ package com.yztc.core.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public abstract class BaseFragment extends Fragment {
     protected View mRootView;
     protected Context mContext = null;//context
 
+    @LayoutRes
     protected abstract int getLayoutResource();
 
     protected abstract void onInitView(Bundle savedInstanceState);
@@ -33,8 +35,7 @@ public abstract class BaseFragment extends Fragment {
     /***
      * 用于在初始化Data之前做一些事
      */
-    protected void initPreData(Bundle savedInstanceState) {
-
+    protected void onPrepareInitData(Bundle savedInstanceState) {
     }
 
     /***
@@ -70,7 +71,7 @@ public abstract class BaseFragment extends Fragment {
             EventBus.getDefault().register(this);
         }
         this.onInitView(savedInstanceState);
-        initPreData(savedInstanceState);
+        onPrepareInitData(savedInstanceState);
         //自动加载
         mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

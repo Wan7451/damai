@@ -12,10 +12,8 @@ import rx.schedulers.Schedulers;
 
 public class HttpBase {
 
-
     protected static Observable.Transformer schedulersTransformer() {
         return new Observable.Transformer() {
-
             @Override
             public Object call(Object observable) {
                 return ((Observable) observable)

@@ -65,7 +65,7 @@ public class ClassItemFragment extends LazyFragment {
     }
 
     @Override
-    protected void init(final View v) {
+    protected void onInitView(final View v) {
 
         cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
 

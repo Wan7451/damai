@@ -15,7 +15,7 @@ public class InjectTestActivity extends InjectActivity {
 
 
     @ViewInject(R.id.alignBounds)
-    TextView text;
+    private TextView text;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {

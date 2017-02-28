@@ -40,11 +40,14 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context = this;
+
         if (quickStart()) {
             return;
         }
 
-        context=this;
+
     }
 
     public static App getContext(){

@@ -13,8 +13,8 @@ public abstract class BaseMVPFragment<V extends BaseView, T extends BasePresente
     protected abstract T initPresenter();
 
     @Override
-    protected void initPreData(Bundle savedInstanceState) {
-        super.initPreData(savedInstanceState);
+    protected void onPrepareInitData(Bundle savedInstanceState) {
+        super.onPrepareInitData(savedInstanceState);
         mPresenter = initPresenter();
         mPresenter.attachView((V) this);
     }

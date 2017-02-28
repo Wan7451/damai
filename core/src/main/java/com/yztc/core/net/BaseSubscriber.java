@@ -59,4 +59,5 @@ public abstract class BaseSubscriber<T> extends Subscriber<T> {
     //出现错误直接调用 自定义的 onError
     public abstract void onError(ExceptionHandle.ResponeThrowable e);
 
+
 }

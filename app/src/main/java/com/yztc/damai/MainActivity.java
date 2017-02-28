@@ -2,6 +2,7 @@ package com.yztc.damai;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
@@ -70,7 +71,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 
     private void restoreSelect() {
         // 选中index
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    long curr;
+    private long curr;
 
     @Override
     public void onBackPressed() {

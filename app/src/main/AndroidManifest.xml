@@ -15,11 +15,8 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".ui.others.ChoiceCityActivity" />
-
         <activity
             android:name=".SpalshActivity"
             android:theme="@style/Splash">
@@ -31,6 +28,7 @@
         </activity>
 
         <service android:name=".BackgroundService" />
+
     </application>
 
 </manifest>

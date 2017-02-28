@@ -31,8 +31,8 @@ public class CustomGlideModel implements GlideModule {
         int defaultMemoryCacheSize = calculator.getMemoryCacheSize();
         int defaultBitmapPoolSize = calculator.getBitmapPoolSize();
 
-        int customMemoryCacheSize = (int) (1.2 * defaultMemoryCacheSize);
-        int customBitmapPoolSize = (int) (1.2 * defaultBitmapPoolSize);
+        int customMemoryCacheSize = 2 * defaultMemoryCacheSize;
+        int customBitmapPoolSize = 2 * defaultBitmapPoolSize;
 
 
         //设置Glide内存缓存大小
@@ -49,7 +49,7 @@ public class CustomGlideModel implements GlideModule {
         builder.setBitmapPool(new LruBitmapPool(customBitmapPoolSize));
 
         File cacheDir = context.getExternalCacheDir();//指定的是数据的缓存地址
-        int diskCacheSize = 1024 * 1024 * 30;//最多可以缓存多少字节的数据
+        int diskCacheSize = 1024 * 1024 * 300;//最多可以缓存多少字节的数据
         //设置磁盘缓存大小
         //设置一个用来存储Resource数据和缩略图的DiskCache实现。
         builder.setDiskCache(new DiskLruCacheFactory(cacheDir.getPath(), "glide", diskCacheSize));
@@ -58,7 +58,7 @@ public class CustomGlideModel implements GlideModule {
         //为所有的默认解码器设置解码格式。如DecodeFormat.PREFER_ARGB_8888。
         //默认是DecodeFormat.PREFER_RGB_565，因为相对于ARGB_8888的4字节/像素
         // 可以节省一半的内存，但不支持透明度且某些图片会出现条带。
-        builder.setDecodeFormat(DecodeFormat.PREFER_RGB_565);
+        builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
 
         //设置磁盘缓存线程池
         //   builder.setDiskCacheService(Executors.newFixedThreadPool(3));

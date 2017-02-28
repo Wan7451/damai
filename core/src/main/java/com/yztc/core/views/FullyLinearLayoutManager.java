@@ -7,6 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+//RecyclerView 嵌套ScrollView
+//RecyclerView 的高度 = 所有ItemView高度的和
+// RecyclerView  的ItemView 不能复用
+
+
+//RecyclerView  实现首页
+//ScrollVoew  ->  LinearLayout  - > 头布局  —> FullyLinearLayoutManager    占内存
+//RecyclerView     使用多种ItemView
 
 public class FullyLinearLayoutManager extends LinearLayoutManager {
 

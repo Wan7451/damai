@@ -8,6 +8,7 @@
     <ImageView
         android:id="@+id/class_img"
         android:layout_width="120dp"
+        android:contentDescription="@string/app_name"
         android:layout_height="160dp" />
 
     <LinearLayout

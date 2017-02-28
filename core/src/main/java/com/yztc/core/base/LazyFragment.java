@@ -1,7 +1,6 @@
 package com.yztc.core.base;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.view.View;
 
 /**
@@ -33,11 +32,6 @@ public abstract class LazyFragment extends BaseFragment {
     }
 
     @Override
-    protected int getLayoutResource() {
-        return getLayoutId();
-    }
-
-    @Override
     protected void onInitView(Bundle savedInstanceState) {
         if(needInit){
             init();
@@ -45,21 +39,14 @@ public abstract class LazyFragment extends BaseFragment {
         isCreated=true;
     }
 
-    @Override
-    protected void onInitData() {
-    }
-
 
     private void init(){
-        init(mRootView);
+        onInitLazyView(mRootView);
         isInited=true;
     }
 
+    protected abstract void onInitLazyView(View v);
 
-
-    protected abstract void init(View v);
-    @LayoutRes
-    protected abstract int getLayoutId();
 
 
 }
