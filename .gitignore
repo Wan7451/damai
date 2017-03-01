@@ -8,3 +8,5 @@
 /captures
 .externalNativeBuild
 /freeline
+libs/
+src/main/res/drawable/

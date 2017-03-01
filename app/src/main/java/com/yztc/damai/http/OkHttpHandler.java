@@ -78,7 +78,7 @@ public class OkHttpHandler extends HttpHandler {
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-                //           .addInterceptor(interceptor)//Log拦截器
+                .addInterceptor(interceptor)//Log拦截器
                 .addInterceptor(cacheInterceptor)//缓存拦截器
                 .addNetworkInterceptor(cacheInterceptor)
 //                .addNetworkInterceptor(basicInterceptor)

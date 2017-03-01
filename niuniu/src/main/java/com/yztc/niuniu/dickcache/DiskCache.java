@@ -25,7 +25,11 @@ public class DiskCache {
     private DiskCache() {
         try {
             File cacheDir = FileUtils.getHttpCacheFile();
-            mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 2, 200 * 1024 * 1024);
+            mDiskLruCache = DiskLruCache.open(
+                    cacheDir,   //缓存路径
+                    getAppVersion(),  //app 版本
+                    2,  //键值对保存数据   key   缓存数据、获取数据的时间  1key2values
+                    300 * 1024 * 1024);//缓存空间大小
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,23 +48,13 @@ public class DiskCache {
     }
 
     public String getString(String key) {
-        return getString(key, CACHE_TIME_OUT);
-    }
+        //DiskLruCache  key  就是文件的名字
 
-    public String getStringNoTimeOut(String key) {
-        return getString(key, System.currentTimeMillis() * 2);
-    }
-
-
-    public String getString(String key, long timeOut) {
         DiskLruCache.Snapshot snapshot = null;
         try {
             snapshot = mDiskLruCache.get(getLruKey(key));
-            if (snapshot == null)
+            if (snapshot == null) //没有缓存过数据
                 return "";
-            if (isTimeOut(snapshot, timeOut)) {
-                return "";
-            }
             return snapshot.getString(1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,6 +64,7 @@ public class DiskCache {
         }
         return "";
     }
+
 
     public void putString(String key, String cache) {
         DiskLruCache.Editor edit = null;
@@ -91,20 +86,28 @@ public class DiskCache {
     }
 
 
-    private boolean isTimeOut(DiskLruCache.Snapshot snapshot, long timeOut) {
+    public boolean isTimeOut(String key, long timeOut) {
+        DiskLruCache.Snapshot snapshot = null;
         try {
+            snapshot = mDiskLruCache.get(getLruKey(key));
+            if (snapshot == null)
+                return true;
             String timeStr = snapshot.getString(0);
+            //当时获取数据的时间
             long time = Long.parseLong(timeStr);
             return System.currentTimeMillis() - time > timeOut;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (snapshot != null)
+                snapshot.close();
         }
         return true;
     }
 
 
-    private boolean isTimeOut(DiskLruCache.Snapshot snapshot) {
-        return isTimeOut(snapshot, CACHE_TIME_OUT);
+    public boolean isTimeOut(String key) {
+        return isTimeOut(key, CACHE_TIME_OUT);
     }
 
     private String getLruKey(String key) {
@@ -115,6 +118,31 @@ public class DiskCache {
     private String putTime() {
         return System.currentTimeMillis() + "";
     }
+
+
+//    public String getStringNoTimeOut(String key) {
+//        return getString(key, System.currentTimeMillis() * 2);
+//    }
+//
+//
+//    public String getString(String key, long timeOut) {
+//        DiskLruCache.Snapshot snapshot = null;
+//        try {
+//            snapshot = mDiskLruCache.get(getLruKey(key));
+//            if (snapshot == null)
+//                return "";
+//            if (isTimeOut(key, timeOut)) {
+//                return "";
+//            }
+//            return snapshot.getString(1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (snapshot != null)
+//                snapshot.close();
+//        }
+//        return "";
+//    }
 
     private int getAppVersion() {
         try {

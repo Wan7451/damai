@@ -1,8 +1,16 @@
 package com.yztc.niuniu.ui.av.mvp;
 
 
+import android.content.Context;
+import android.text.TextUtils;
+
+import com.yztc.niuniu.dickcache.DickCacheFunc;
+import com.yztc.niuniu.dickcache.DiskCache;
+import com.yztc.niuniu.net.ExceptionHandle;
 import com.yztc.niuniu.net.IAvApi;
+import com.yztc.niuniu.net.NetSubscriber;
 import com.yztc.niuniu.ui.av.AvBean;
+import com.yztc.niuniu.ui.sihu.mvp.SihuPresenterImpl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,8 +19,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-import rx.Observer;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -23,34 +29,51 @@ import rx.schedulers.Schedulers;
 
 public class AvPresenterImpl implements IAvPresenter {
 
+    private static final String KEY_LIST_PULL = SihuPresenterImpl.class.getName() + "LIST";
+    private static final String KEY_LIST_PUSH = SihuPresenterImpl.class.getName() + "LIST";
+    private static final String KEY_IMAGESLIST = SihuPresenterImpl.class.getName() + "IMAGES_LIST";
+    private final DiskCache diskCache;
+
     private static int maxPage;
+    private Context context;
     private IAvView view;
     private IAvModel model;
 
     private int page;
 
-    public AvPresenterImpl(IAvView view) {
+    public AvPresenterImpl(Context context, IAvView view) {
+        this.context = context;
         this.view = view;
-        this.model = new AvModelImpl();
+        diskCache = DiskCache.getInstance();
+        model = new AvModelImpl();
     }
-
 
     @Override
     public void loadData() {
         page = 1;
+
+        String key = KEY_LIST_PULL + page;
+
+        final String cache = diskCache.getString(key);
+        if (!TextUtils.isEmpty(cache)) {
+            ArrayList<AvBean> data = new AvPresenterImpl.ToBeanConvert().call(cache);
+            view.showContent(data, true);
+        }
+
+        if (!diskCache.isTimeOut(key)) {
+            return;
+        }
+
         model.loadList("1")
+                .map(new DickCacheFunc(key))
                 .map(new ToBeanConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<AvBean>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
+                .subscribe(new NetSubscriber<ArrayList<AvBean>>(context) {
 
                     @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -66,18 +89,29 @@ public class AvPresenterImpl implements IAvPresenter {
             view.showContent(null, false);
             return;
         }
-        model.loadList("1-" + ++page)
+
+        page++;
+        String key = KEY_LIST_PUSH + "1-" + page;
+
+        final String cache = diskCache.getString(key);
+        if (!TextUtils.isEmpty(cache)) {
+            ArrayList<AvBean> data = new AvPresenterImpl.ToBeanConvert().call(cache);
+            view.showContent(data, false);
+        }
+
+        if (!diskCache.isTimeOut(key)) {
+            return;
+        }
+
+        model.loadList("1-" + page)
+                .map(new DickCacheFunc(key))
                 .map(new ToBeanConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<AvBean>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
+                .subscribe(new NetSubscriber<ArrayList<AvBean>>(context) {
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
                         view.showError(e.getMessage());
                     }
 
@@ -126,19 +160,28 @@ public class AvPresenterImpl implements IAvPresenter {
     @Override
     public void loadData(String path) {
         path = path.replaceFirst("/", "");
+
+        String key = KEY_IMAGESLIST + path;
+
+        final String cache = diskCache.getString(key);
+        if (!TextUtils.isEmpty(cache)) {
+            ArrayList<String> data = new AvPresenterImpl.ToStringArrayConvert().call(cache);
+            view.startDetail(data);
+        }
+
+        if (!diskCache.isTimeOut(key)) {
+            return;
+        }
+
         model.loadDetail(IAvApi.BASE_URL + path)
-                .map(new AvPresenterImpl.ToStringConvert())
+                .map(new DickCacheFunc(key))
+                .map(new AvPresenterImpl.ToStringArrayConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<String>>() {
+                .subscribe(new NetSubscriber<ArrayList<String>>(context) {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -149,7 +192,7 @@ public class AvPresenterImpl implements IAvPresenter {
     }
 
 
-    static class ToStringConvert implements Func1<String, ArrayList<String>> {
+    static class ToStringArrayConvert implements Func1<String, ArrayList<String>> {
 
         @Override
         public ArrayList<String> call(String s) {

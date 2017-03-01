@@ -45,8 +45,6 @@ public class NetRequest {
 
         client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addNetworkInterceptor(new RewriteCacheControlInterceptor())
-                .addInterceptor(new RewriteCacheControlInterceptor())
                 .dns(new HttpDns())
                 .build();
     }

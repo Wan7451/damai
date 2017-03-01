@@ -24,7 +24,7 @@ public class AvFragment extends BaseLazyListFragment implements IAvView {
     @Override
     protected void onViewInited() {
         super.onViewInited();
-        listPresenter = new AvPresenterImpl(this);
+        listPresenter = new AvPresenterImpl(getContext(), this);
     }
 
 

@@ -1,6 +1,9 @@
 package com.yztc.niuniu.net;
 
-import com.yztc.niuniu.base.BaseView;
+import android.content.Context;
+import android.util.Log;
+
+import com.yztc.niuniu.dialog.LoadingDialog;
 
 import rx.Subscriber;
 
@@ -10,23 +13,41 @@ import rx.Subscriber;
 
 public abstract class NetSubscriber<T> extends Subscriber<T> {
 
-    private BaseView view;
+
+    private Context context;
+    private LoadingDialog loadingDialog;
+
+    public NetSubscriber(Context context) {
+        this.context = context;
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        view = getView();
-        view.showLoading();
+        if (ishowLoading()) {
+            loadingDialog = new LoadingDialog(context);
+            loadingDialog.show();
+        }
     }
 
     @Override
     public void onCompleted() {
-        view.hideLoading();
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
     }
 
     @Override
     public void onError(Throwable e) {
-        view.hideLoading();
+        Log.i("======", e.getMessage());
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        for (StackTraceElement trace : stackTrace) {
+            Log.i("======", trace.toString());
+        }
+
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
 
         ExceptionHandle.ResponeThrowable throwable;
         //后台逻辑执行失败，抛出的异常
@@ -36,11 +57,13 @@ public abstract class NetSubscriber<T> extends Subscriber<T> {
             //网络操作执行的异常
             throwable = ExceptionHandle.handleException(e);
         }
-        view.showError(throwable.message);
-
+        onError(throwable);
     }
 
+    protected boolean ishowLoading() {
+        return false;
+    }
 
-    public abstract BaseView getView();
+    public abstract void onError(ExceptionHandle.ResponeThrowable throwable);
 
 }

@@ -1,10 +1,13 @@
 package com.yztc.niuniu.ui.sihu.mvp;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.yztc.niuniu.dickcache.DickCacheFunc;
 import com.yztc.niuniu.dickcache.DiskCache;
+import com.yztc.niuniu.net.ExceptionHandle;
 import com.yztc.niuniu.net.ISihuApi;
+import com.yztc.niuniu.net.NetSubscriber;
 import com.yztc.niuniu.ui.sihu.SihuBean;
 
 import org.jsoup.Jsoup;
@@ -14,7 +17,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -31,17 +33,21 @@ public class SihuPresenterImpl implements ISihuPresenter {
     private final DiskCache diskCache;
 
 
+    private Context context;
     private ISihulView view;
     private ISihuModel model;
 
     private String page;
     private int count;
 
-    public SihuPresenterImpl(ISihulView view) {
+
+    public SihuPresenterImpl(Context context, ISihulView view) {
+        this.context = context;
         this.view = view;
-        this.model = new SihuModelImpl();
         diskCache = DiskCache.getInstance();
+        model = new SihuModelImpl();
     }
+
 
 
     @Override
@@ -49,27 +55,29 @@ public class SihuPresenterImpl implements ISihuPresenter {
         page = "index";
         count = 1;
 
-        final String cache = diskCache.getString(KEY_LIST_PULL + page);
+        String key = KEY_LIST_PULL + page;
+
+        final String cache = diskCache.getString(key);
         if (!TextUtils.isEmpty(cache)) {
             ArrayList<SihuBean> data = new SihuPresenterImpl.ToBeanConvert().call(cache);
             view.showContent(data, true);
+        }
+
+        if (!diskCache.isTimeOut(key)) {
             return;
         }
 
         model.loadlist(page)
-                .map(new DickCacheFunc(KEY_LIST_PULL + page))
+                .map(new DickCacheFunc(key))
                 .map(new ToBeanConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<SihuBean>>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(new NetSubscriber<ArrayList<SihuBean>>(context) {
 
-                    }
 
                     @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -83,27 +91,28 @@ public class SihuPresenterImpl implements ISihuPresenter {
     public void addData() {
         page = "index-" + ++count;
 
-        final String cache = diskCache.getString(KEY_LIST_PUSH + page);
+        String key = KEY_LIST_PUSH + page;
+
+        final String cache = diskCache.getString(key);
         if (!TextUtils.isEmpty(cache)) {
             ArrayList<SihuBean> data = new SihuPresenterImpl.ToBeanConvert().call(cache);
             view.showContent(data, false);
+        }
+
+        if (!diskCache.isTimeOut(key)) {
             return;
         }
 
         model.loadlist(page)
-                .map(new DickCacheFunc(KEY_LIST_PUSH + page))
+                .map(new DickCacheFunc(key))
                 .map(new ToBeanConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<SihuBean>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
+                .subscribe(new NetSubscriber<ArrayList<SihuBean>>(context) {
 
                     @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -116,28 +125,33 @@ public class SihuPresenterImpl implements ISihuPresenter {
     @Override
     public void loadImages(String path) {
         path = path.replaceFirst("/", "");
+        String key = KEY_IMAGESLIST + path;
 
-        final String cache = diskCache.getString(KEY_IMAGESLIST + path);
+        final String cache = diskCache.getString(key);
         if (!TextUtils.isEmpty(cache)) {
             ArrayList<String> data = new SihuPresenterImpl.ToStringArrayConvert().call(cache);
             view.startDetail(data);
+        }
+
+        if (!diskCache.isTimeOut(key)) {
             return;
         }
 
         model.loadImages(ISihuApi.BASE_URL + path)
-                .map(new DickCacheFunc(KEY_IMAGESLIST + path))
+                .map(new DickCacheFunc(key))
                 .map(new ToStringArrayConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<String>>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(new NetSubscriber<ArrayList<String>>(context) {
 
+                    @Override
+                    protected boolean ishowLoading() {
+                        return true;
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override

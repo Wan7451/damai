@@ -25,7 +25,7 @@ public class SihuFragment extends BaseLazyListFragment implements ISihulView {
     @Override
     protected void onViewInited() {
         super.onViewInited();
-        presenter = new SihuPresenterImpl(this);
+        presenter = new SihuPresenterImpl(getContext(), this);
     }
 
 

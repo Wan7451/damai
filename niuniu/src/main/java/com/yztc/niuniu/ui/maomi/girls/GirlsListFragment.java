@@ -24,7 +24,7 @@ public class GirlsListFragment extends BaseListFragment implements IGirlsView {
 
     @Override
     protected void onViewInited() {
-        presenter = new GirlsPresenterImpl(this);
+        presenter = new GirlsPresenterImpl(getContext(), this);
 
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(
                 2,

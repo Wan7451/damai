@@ -60,12 +60,12 @@ public class ClassItemFragment extends LazyFragment {
 
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutResource() {
         return R.layout.fragment_item_class;
     }
 
     @Override
-    protected void onInitView(final View v) {
+    protected void onInitLazyView(final View v) {
 
         cityId = (int) SPUtils.get(getContext(), Constant.SP_CURR_CITY, 852);
 
@@ -286,6 +286,12 @@ public class ClassItemFragment extends LazyFragment {
         args.putInt("type", i);
         f.setArguments(args);
         return f;
+    }
+
+
+    @Override
+    protected void onInitData() {
+
     }
 
     @Override

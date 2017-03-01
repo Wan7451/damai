@@ -1,10 +1,13 @@
 package com.yztc.niuniu.ui.maomi.girls.mvp;
 
+import android.content.Context;
 import android.text.TextUtils;
 
-import com.yztc.niuniu.dickcache.DickCacheNoTimeOutFunc;
+import com.yztc.niuniu.dickcache.DickCacheFunc;
 import com.yztc.niuniu.dickcache.DiskCache;
+import com.yztc.niuniu.net.ExceptionHandle;
 import com.yztc.niuniu.net.IMaomiApi;
+import com.yztc.niuniu.net.NetSubscriber;
 import com.yztc.niuniu.ui.maomi.girls.GirlsBean;
 
 import org.jsoup.Jsoup;
@@ -14,7 +17,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -32,38 +34,44 @@ public class GirlsPresenterImpl implements IGirlsPresenter {
 
     private final DiskCache diskCache;
 
+    private Context context;
     private IGirlsView view;
     private IGirlsModel model;
 
-    public GirlsPresenterImpl(IGirlsView view) {
+    public GirlsPresenterImpl(Context context, IGirlsView view) {
+        this.context = context;
         this.view = view;
         this.model = new GirlsModelImpl();
         diskCache = DiskCache.getInstance();
     }
 
 
+
     @Override
     public void loadData() {
-        final String cache = diskCache.getString(KEY_LIST);
+
+        String key = KEY_LIST;
+
+        final String cache = diskCache.getString(key);
         if (!TextUtils.isEmpty(cache)) {
             ArrayList<GirlsBean> data = new ToBeanConvert().call(cache);
             view.showContent(data, true);
+        }
+
+        if (!diskCache.isTimeOut(key, System.currentTimeMillis())) {
             return;
         }
 
         model.loadlist("")
-                .map(new DickCacheNoTimeOutFunc(KEY_LIST))
+                .map(new DickCacheFunc(key))
                 .map(new ToBeanConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<GirlsBean>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(new NetSubscriber<ArrayList<GirlsBean>>(context) {
 
                     @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -75,27 +83,29 @@ public class GirlsPresenterImpl implements IGirlsPresenter {
 
     @Override
     public void loadImagesList(String path) {
-        String cache = diskCache.getString(KEY_IMAGESLIST + path);
+        path = path.replaceFirst("/", "");
+        String key = KEY_IMAGESLIST + path;
+
+        String cache = diskCache.getString(key);
         if (!TextUtils.isEmpty(cache)) {
             ArrayList<GirlsBean> data = new ToImagesListConvert().call(cache);
             view.showContent(data, true);
+        }
+
+        if (!diskCache.isTimeOut(key, System.currentTimeMillis())) {
             return;
         }
 
-        path = path.replaceFirst("/", "");
         model.imagesList(IMaomiApi.BASE_URL + path)
-                .map(new DickCacheNoTimeOutFunc(KEY_IMAGESLIST))
+                .map(new DickCacheFunc(key))
                 .map(new ToImagesListConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<GirlsBean>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(new NetSubscriber<ArrayList<GirlsBean>>(context) {
 
                     @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -108,27 +118,35 @@ public class GirlsPresenterImpl implements IGirlsPresenter {
 
     @Override
     public void loadImages(String path) {
-        String cache = diskCache.getString(KEY_IMAGES + path);
+        path = path.replaceFirst("/", "");
+        String key = KEY_IMAGES + path;
+
+        String cache = diskCache.getString(key);
         if (!TextUtils.isEmpty(cache)) {
             ArrayList<String> data = new ToImagesConvert().call(cache);
             view.startDetail(data);
+        }
+
+        if (!diskCache.isTimeOut(key, System.currentTimeMillis())) {
             return;
         }
 
-        path = path.replaceFirst("/", "");
+
         model.imagesList(IMaomiApi.BASE_URL + path)
-                .map(new DickCacheNoTimeOutFunc(KEY_IMAGES))
+                .map(new DickCacheFunc(key))
                 .map(new ToImagesConvert())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<String>>() {
+                .subscribe(new NetSubscriber<ArrayList<String>>(context) {
+
                     @Override
-                    public void onCompleted() {
+                    protected boolean ishowLoading() {
+                        return true;
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        view.showError(e.getMessage());
+                    public void onError(ExceptionHandle.ResponeThrowable e) {
+                        view.showError(e.message);
                     }
 
                     @Override
@@ -139,7 +157,7 @@ public class GirlsPresenterImpl implements IGirlsPresenter {
 
     }
 
-    static class ToImagesConvert implements Func1<String, ArrayList<String>> {
+    private static class ToImagesConvert implements Func1<String, ArrayList<String>> {
 
         @Override
         public ArrayList<String> call(String s) {
@@ -161,7 +179,7 @@ public class GirlsPresenterImpl implements IGirlsPresenter {
     }
 
 
-    static class ToBeanConvert implements Func1<String, ArrayList<GirlsBean>> {
+    private static class ToBeanConvert implements Func1<String, ArrayList<GirlsBean>> {
 
         @Override
         public ArrayList<GirlsBean> call(String s) {
@@ -189,7 +207,7 @@ public class GirlsPresenterImpl implements IGirlsPresenter {
         }
     }
 
-    static class ToImagesListConvert implements Func1<String, ArrayList<GirlsBean>> {
+    private static class ToImagesListConvert implements Func1<String, ArrayList<GirlsBean>> {
 
         @Override
         public ArrayList<GirlsBean> call(String s) {
